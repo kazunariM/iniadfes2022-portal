@@ -43,7 +43,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    
+    'fes2022',
+    'fes2022.administration',
+    'fes2022.portal',
 ]
 
 MIDDLEWARE = [
