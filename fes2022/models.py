@@ -28,11 +28,17 @@ class Visitor(models.Model):
     session = models.ForeignKey(Session, blank=True, null=True, on_delete=models.SET_NULL)
 
 
+CAMPUS_CHOICES = (
+    (0, 'INIAD'),
+    (1, 'WELLB'),
+)
+
+
 class Room(models.Model):
     id = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
     roomid = models.CharField(max_length=20, db_index=True, verbose_name="教室ID")
     groupname = models.CharField(max_length=100, verbose_name="団体名")
-    campus = models.IntegerField(default=0, verbose_name="INIAD or WELLB")
+    campus = models.IntegerField(default=0, choices=CAMPUS_CHOICES, verbose_name="INIAD or WELLB")
     floor = models.IntegerField(default=1, verbose_name="階")
     only_stamp = models.BooleanField(default=False, verbose_name="スタンプラリー専用かどうか(優先度高:こちらがTrueの場合強制的にスタンプラリー専用になります)")
     have_a_stamp = models.BooleanField(default=False, verbose_name="スタンプラリー対象団体かどうか")
