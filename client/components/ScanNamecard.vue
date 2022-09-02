@@ -1,0 +1,12 @@
+<template>
+    <div>
+        <article>
+            <h2>カスタムINIADネームカードスキャン</h2>
+            <p>カスタムINIADネームカードに印刷されたQRコードをスキャンしてください</p>
+        </article>
+        <article>
+            <h2>カスタムINIADネームカードとは？</h2>
+            <p>(カスタムINIADネームカードの説明)</p>
+        </article>
+    </div>
+</template>
