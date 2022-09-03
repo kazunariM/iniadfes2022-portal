@@ -3,7 +3,7 @@
         <section>
             <h2>まずはカスタムINIADネームカードスキャン</h2>
             <p>カスタムINIADネームカードに印刷されたQRコードをスキャンしてください</p>
-            <ScanQRcodeComponents />
+            <ScanQRcodeComponent />
         </section>
         <section class="mt-2">
             <h2>カスタムINIADネームカードとは？</h2>
