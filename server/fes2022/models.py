@@ -77,7 +77,7 @@ class Room(models.Model):
 
 class PlaceID(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
-    placeid = models.CharField(max_length=20, db_index=True, verbose_name="場所ID")
+    placeid = models.IntegerField(db_index=True, verbose_name="場所ID")
     placenum = models.IntegerField(verbose_name="場所番号")
     door_number = models.IntegerField(verbose_name="教室番号かドア番号")
     room = models.ForeignKey(Room, related_name="PlaceIDs", on_delete=models.CASCADE)
