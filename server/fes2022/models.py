@@ -17,13 +17,14 @@ class NamecardDesign(models.Model):
         result = 'stampbg/{}{}'.format(str(uuid.uuid4().hex), os.path.splitext(filename)[-1])
         return result
 
-    id = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
+    serial = models.IntegerField(verbose_name="通し番号")
     img = models.ImageField(upload_to=get_image_path, verbose_name="デザイン画像")
     name = models.CharField(max_length=50, verbose_name="ネームカードデザインの名前")
     campus = models.IntegerField(default=0, choices=CAMPUS_CHOICES, verbose_name="INIAD or WELLB")
     numofprints = models.IntegerField(default=500, verbose_name="印刷数")
     numofremaining = models.IntegerField(default=-1, verbose_name="残り")
-    is_only_secret = models.BooleanField(default=False, verbose_name="シークレット限定か")
+    is_subject_secret = models.BooleanField(default=False, verbose_name="シークレットか")
     is_only_advance = models.BooleanField(default=False, verbose_name="事前登録限定か")
     text = models.TextField(verbose_name="デザインの説明")
 
@@ -32,24 +33,27 @@ class NamecardDesign(models.Model):
 
 
 class Visitor(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
-    userid = models.UUIDField(default=uuid.uuid4, db_index=True, verbose_name="QRコードのID")
+    userid = models.UUIDField(default=uuid.uuid4, db_index=True, unique=True, verbose_name="QRコードのID")
+    management_uuid = models.UUIDField(default=uuid.uuid4, unique=True, verbose_name="管理用uuid")
     date = models.DateField(verbose_name="入場日")
     nickname = models.CharField(max_length=20, verbose_name="ニックネーム")
     first_name = models.CharField(max_length=20, verbose_name="名")
     last_name = models.CharField(max_length=20, verbose_name="姓")
     ruby_first_name = models.CharField(max_length=20, verbose_name="メイ")
     ruby_last_name = models.CharField(max_length=20, verbose_name="セイ")
-    email = models.EmailField(max_length=100, verbose_name="E-mail", blank=True, null=True)
+    email = models.EmailField(max_length=200, verbose_name="E-mail", blank=True, null=True)
     phone = models.CharField(max_length=15, verbose_name="電話番号", blank=True, null=True)
-    address = models.CharField(max_length=30, verbose_name="都道府県市区町村")
+    address = models.CharField(max_length=20, verbose_name="住所")
     age = models.IntegerField(default=0, verbose_name="年代")
+    gender = models.CharField(max_length=8, verbose_name="性別")
+    major_subject = models.CharField(max_length=20, verbose_name="専攻/希望分野")
     job = models.CharField(max_length=20, verbose_name="職業")
-    design = models.ForeignKey(NamecardDesign, related_name="visitors", on_delete=models.PROTECT, verbose_name="ネームカードのデザイン")
+    design = models.ForeignKey(NamecardDesign, related_name="visitors_select", on_delete=models.PROTECT, verbose_name="ネームカードのデザイン")
     remark = models.TextField(verbose_name="備考欄", blank=True, null=True)
-    number = models.IntegerField(verbose_name="ネームカードにプリントされるID")
     created_at = models.DateTimeField(default=timezone.now, verbose_name="初回登録日時")
+    is_verified_email = models.BooleanField(default=False, verbose_name="使用可能なメールアドレスかどうか")
     is_preregistration = models.BooleanField(default=False, verbose_name="事前登録かどうか")
+    is_printed = models.BooleanField(default=False, verbose_name="印刷完了かどうか")
     is_handedover = models.BooleanField(default=False, verbose_name="お渡し済みかどうか")
     session = models.ForeignKey(Session, blank=True, null=True, on_delete=models.SET_NULL)
 
@@ -58,12 +62,12 @@ class Visitor(models.Model):
 
 
 class Room(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
     groupname = models.CharField(max_length=100, verbose_name="団体名")
     campus = models.IntegerField(default=0, choices=CAMPUS_CHOICES, verbose_name="INIAD or WELLB")
     floor = models.IntegerField(default=1, verbose_name="階")
-    only_stamp = models.BooleanField(default=False, verbose_name="スタンプラリー専用かどうか(優先度高:こちらがTrueの場合強制的にスタンプラリー専用になります)")
     room_number = models.IntegerField(verbose_name="教室名かドア番号の小さいほう")
+    only_stamp = models.BooleanField(default=False, verbose_name="スタンプラリー専用かどうか(優先度高:こちらがTrueの場合強制的にスタンプラリー専用になります)")
     have_a_stamp = models.BooleanField(default=False, verbose_name="スタンプラリー対象団体かどうか")
     pop = models.ImageField(upload_to='ipad_pop/', verbose_name="QRコード読み取りiPadに表示する画像")
 
@@ -72,6 +76,7 @@ class Room(models.Model):
         
 
 class PlaceID(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
     placeid = models.CharField(max_length=20, db_index=True, verbose_name="場所ID")
     placenum = models.IntegerField(verbose_name="場所番号")
     door_number = models.IntegerField(verbose_name="教室番号かドア番号")
@@ -82,7 +87,6 @@ class PlaceID(models.Model):
 
 
 class NowCampus(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
     visitor = models.ForeignKey(Visitor, on_delete=models.PROTECT, related_name="nowcampus", verbose_name="VisitorのユーザID(id)との紐づけ")
     scanned_at = models.DateTimeField(default=timezone.now, verbose_name="日時")
     inorout = models.BooleanField(default=True, verbose_name="入構or退構")
@@ -92,14 +96,13 @@ class NowCampus(models.Model):
         
 
 class NowRoom(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
     visitor = models.ForeignKey(Visitor, on_delete=models.PROTECT, related_name="nowroom", verbose_name="VisitorのユーザID(id)との紐づけ")
     room = models.ForeignKey(Room, on_delete=models.PROTECT, related_name="nowroom", verbose_name="Roomの教室ID(id)との紐づけ")
     scanned_at = models.DateTimeField(default=timezone.now, verbose_name="日時")
     inorout = models.BooleanField(default=True, verbose_name="入室or退室")
 
     def __str__(self):
-        return f'{"入室" if self.inorout else "退室"} - {self.room.groupname} - {self.scanned_at}'
+        return f'{self.scanned_at} - {"入室" if self.inorout else "退室"} - {self.room.groupname}'
 
 
 class StampCourse(models.Model):
@@ -128,7 +131,7 @@ class Stamp(models.Model):
     stampcourse = models.ForeignKey(StampCourse, related_name="stamps", on_delete=models.CASCADE)
     room = models.OneToOneField(Room, related_name="stamp", on_delete=models.CASCADE)
     img = models.ImageField(upload_to=get_image_path, verbose_name="スタンプの素材画像")
-    serial = models.IntegerField(verbose_name="表示順序")
+    serial = models.IntegerField(verbose_name="表示順序")   
     position_y = models.IntegerField(default=0, verbose_name="素材の上側のポジション(px)")
     position_x = models.IntegerField(default=0, verbose_name="素材の左側のポジション(px)")
     story = models.TextField(blank=True, null=True, verbose_name="ストーリー用")
