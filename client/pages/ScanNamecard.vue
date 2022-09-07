@@ -1,5 +1,5 @@
 <template>
-    <article>
-        <AboutNamecard />
-    </article>
+	<article>
+		<AboutNamecard />
+	</article>
 </template>
