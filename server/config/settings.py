@@ -42,6 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework.authtoken',
+    'allauth',
+    'allauth.account',
+    'rest_auth',
+    'rest_auth.registration',
 
     'fes2022',
     'fes2022.administration',
@@ -84,8 +89,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DATABASE_NAME', str),
+        'USER': env('DATABASE_USER', str),
+        'PASSWORD': env('DATABASE_PASSWORD', str),
+        'HOST': env('DATABASE_HOST', str),
+        'PORT': env('DATABASE_PORT', int),
+    } if env('IS_POSTGRESQL', int) else {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': (BASE_DIR / 'db.sqlite3'),
     }
 }
 
@@ -135,9 +147,29 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'files')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# Django REST framework
+# https://www.django-rest-framework.org/
 if not DEBUG:
     REST_FRAMEWORK = { 
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
         ),
     }
+
+
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if env('IS_SEND_EMAIL', int) else 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = env('EMAIL_PORT', int) if env('IS_SEND_EMAIL', int) else ''
+EMAIL_PORT = env('EMAIL_PORT', int) if env('IS_SEND_EMAIL', int) else 587
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', str) if env('IS_SEND_EMAIL', int) else ''
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', str) if env('IS_SEND_EMAIL', int) else ''
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+SERVER_EMAIL = '' if DEBUG else env('SERVER_EMAIL', str)
+ADMINS = [] if DEBUG else [('developer', env('ADMIN_EMAIL', str))]
+
+
+# Auth
+SITE_ID = 1
