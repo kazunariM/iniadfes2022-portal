@@ -1,6 +1,7 @@
 export default {
+	ssr: true,
 	// Target: https://go.nuxtjs.dev/config-target
-	target: "static",
+	target: "server",
 
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	head: {
@@ -31,7 +32,7 @@ export default {
 		// https://go.nuxtjs.dev/axios
 		"@nuxtjs/axios",
 		// https://go.nuxtjs.dev/pwa
-		"@nuxtjs/pwa",
+		// "@nuxtjs/pwa",
 		// https://github.com/nuxt-community/style-resources-module
 		"@nuxtjs/style-resources",
 	],

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import jsQR from "~/static/jsQR.js"
+import jsQR from "~/assets/js/jsQR.js"
 
 export default {
 	name: "ScanQRcodeComponent",
