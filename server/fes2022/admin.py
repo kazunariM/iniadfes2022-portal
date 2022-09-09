@@ -6,8 +6,8 @@ from . import models
 
 class VisitorAdmin(admin.ModelAdmin):
     readonly_fields = ('pk', "userid", "created_at", "session")
-    list_display = ("pk", "last_name", "first_name", "is_handedover", "created_at")
-    list_filter = ("is_handedover", )
+    list_display = ("pk", "last_name", "first_name", "is_handedover", "is_preregistration", "created_at")
+    list_filter = ("is_handedover", "is_preregistration",)
     list_display_links = ('pk', "last_name", )
     search_fields = ("nickname", "last_name", "first_name")
 
@@ -27,7 +27,9 @@ admin.site.register(models.Room, RoomAdmin)
 admin.site.register(models.PlaceID)
 admin.site.register(models.NowCampus)
 admin.site.register(models.NowRoom)
+admin.site.register(models.Area)
 admin.site.register(models.StampCourse)
+admin.site.register(models.Story)
 admin.site.register(models.Stamp)
 admin.site.register(models.StampHistory)
 admin.site.register(models.Inset)
