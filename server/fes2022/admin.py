@@ -5,15 +5,15 @@ from . import models
 
 
 class VisitorAdmin(admin.ModelAdmin):
-    readonly_fields = ('pk', "userid", "created_at", "session")
-    list_display = ("pk", "last_name", "first_name", "is_handedover", "is_preregistration", "created_at")
+    readonly_fields = ("pk", "management_uuid", "userid", "created_at", "session")
+    list_display = ("pk", "last_name", "first_name", "is_handedover", "is_preregistration", "is_verified_email","created_at")
     list_filter = ("is_handedover", "is_preregistration",)
-    list_display_links = ('pk', "last_name", )
+    list_display_links = ("pk", "last_name", )
     search_fields = ("nickname", "last_name", "first_name")
 
 
 class RoomAdmin(admin.ModelAdmin):
-    readonly_fields = ('uuid',)
+    readonly_fields = ("uuid",)
     list_display = ("campus", "groupname",)
     list_filter = ("only_stamp", "have_a_stamp", "campus",)
     list_display_links = ("groupname",)

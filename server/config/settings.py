@@ -161,7 +161,7 @@ if not DEBUG:
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if env('IS_SEND_EMAIL', int) else 'django.core.mail.backends.console.EmailBackend'
 
-EMAIL_HOST = env('EMAIL_PORT', int) if env('IS_SEND_EMAIL', int) else ''
+EMAIL_HOST = env('EMAIL_HOST', str) if env('IS_SEND_EMAIL', int) else ''
 EMAIL_PORT = env('EMAIL_PORT', int) if env('IS_SEND_EMAIL', int) else 587
 EMAIL_HOST_USER = env('EMAIL_HOST_USER', str) if env('IS_SEND_EMAIL', int) else ''
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', str) if env('IS_SEND_EMAIL', int) else ''

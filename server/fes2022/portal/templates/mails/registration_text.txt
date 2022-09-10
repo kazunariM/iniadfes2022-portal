@@ -1,0 +1,21 @@
+{{ visitor.last_name }} {{ visitor.first_name }} 様
+
+INIAD-FES・WELLB-FES実行委員会です。
+この度は来場者事前登録していただきありがとうございます。
+
+以下の内容に問題がなければこちらのURLを開きメールアドレスの確認をお願い致します。
+{{ protocol }}://{{ domain }}/complete/{{ visitor.management_uuid }}
+
+
+==========
+
+お名前 : {{ visitor.last_name }} {{ visitor.first_name }}
+フリガナ : {{ visitor.ruby_last_name }} {{ visitor.ruby_first_name }}
+ニックネーム : {{ visitor.nickname }}
+メールアドレス : {{ visitor.email }}
+
+==========
+
+間違いがございましたら support@iniadfes.com までご連絡ください。
+
+※本メールは送信専用メールアドレスから配信されています。
