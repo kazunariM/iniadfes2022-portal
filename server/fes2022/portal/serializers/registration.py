@@ -4,15 +4,15 @@ from rest_framework import serializers
 import datetime
 
 from ... import models
-from ... import event_schedule
+from ... import event_data
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Visitor
         fields = [
-            'nickname', 'first_name', 'last_name', 'ruby_first_name', 'ruby_last_name',
-            'email', 'address', 'age', 'gender', 'major_subject', 'job', 'design',
+            'nickname', 'first_name', 'last_name', 'ruby_first_name', 'ruby_last_name', 'email', 
+            'address', 'age', 'gender', 'major_subject', 'job', 'know_about', 'design',
         ]
         
     def validate_nickname(self, value):
@@ -33,7 +33,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return models.Visitor.objects.create(
             **validated_data,
-            is_preregistration=(datetime.date.today() < event_schedule.PREREGISTRATION),
+            is_preregistration=(datetime.date.today() < event_data.PREREGISTRATION),
         )
 
 

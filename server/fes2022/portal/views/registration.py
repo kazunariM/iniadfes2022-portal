@@ -1,17 +1,25 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.shortcuts import get_object_or_404
+from django.middleware.csrf import get_token
 
 from ..serializers import registration as serializer
 from ... import models
-from ... import event_schedule
+from ... import event_data
 
 import datetime, os, qrcode, io
 
 # Create your views here.
+
+
+class GetCsrf(APIView):
+    def get(self, request):
+        return Response({'csrftoken':get_token(request)}, status=200)
 
 
 class RegistrationView(CreateAPIView):
@@ -36,7 +44,7 @@ class NamecardView(ListAPIView):
     def get_queryset(self):
         return \
             models.NamecardDesign.objects.all() \
-            if datetime.date.today() < event_schedule.PREREGISTRATION \
+            if datetime.date.today() < event_data.PREREGISTRATION \
             else models.NamecardDesign.objects.filter(is_only_advance=False)
 
 

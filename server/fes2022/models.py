@@ -1,7 +1,10 @@
 from django.db import models
-import uuid, os
 from django.utils import timezone
 from django.contrib.sessions.models import Session
+from django.contrib.postgres.fields import ArrayField
+import uuid, os
+
+from . import event_data
 
 # Create your models here.
 
@@ -10,10 +13,6 @@ CAMPUS_CHOICES = (
     (0, 'INIAD'),
     (1, 'WELLB'),
 )
-
-
-class EventDate(models.Model):
-    date = models.DateField(verbose_name="開催日")
 
 
 class NamecardDesign(models.Model):
@@ -46,14 +45,14 @@ class Visitor(models.Model):
     ruby_last_name = models.CharField(max_length=20, verbose_name="セイ")
     email = models.EmailField(max_length=200, verbose_name="E-mail", blank=True, null=True)
     phone = models.CharField(max_length=15, verbose_name="電話番号", blank=True, null=True)
-    address = models.CharField(max_length=20, verbose_name="住所")
-    age = models.IntegerField(default=0, verbose_name="年代")
-    gender = models.CharField(max_length=8, verbose_name="性別")
-    major_subject = models.CharField(max_length=20, verbose_name="専攻/希望分野")
-    job = models.CharField(max_length=20, verbose_name="職業")
+    address = models.IntegerField(choices=event_data.ADDRESS_CHOICES, verbose_name="住所")
+    age = models.IntegerField(choices=event_data.AGE_CHOICES, verbose_name="年代")
+    gender = models.IntegerField(choices=event_data.GENDER_CHOICES, verbose_name="性別")
+    major_subject = models.IntegerField(choices=event_data.MAJOR_SUBJECT_CHOICES, blank=True, null=True, verbose_name="専攻/希望分野")
+    job = models.IntegerField(choices=event_data.JOB_CHOICES, verbose_name="職業")
+    know_about = ArrayField(models.CharField(max_length=20), blank=True)
     design = models.ForeignKey(NamecardDesign, related_name="visitors_select", on_delete=models.PROTECT, verbose_name="ネームカードのデザイン")
     remark = models.TextField(verbose_name="備考欄", blank=True, null=True)
-    date = models.ManyToManyField(EventDate, related_name="visitors", blank=True)
     created_at = models.DateTimeField(default=timezone.now, verbose_name="初回登録日時")
     is_verified_email = models.BooleanField(default=False, verbose_name="使用可能なメールアドレスかどうか")
     is_preregistration = models.BooleanField(default=False, verbose_name="事前登録かどうか")

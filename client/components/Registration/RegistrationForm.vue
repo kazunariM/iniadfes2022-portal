@@ -207,7 +207,6 @@ export default {
 				email: "",
 				nickname: "",
 				design: "",
-				zip: "",
 				address: "",
 				gender: "",
 				age: "",
@@ -271,6 +270,7 @@ export default {
 		this.error.job = getErrordata.job
 		this.error.major_subject = getErrordata.major_subject
 		this.error.know_about = getErrordata.know_about
+		this.$store.dispatch("Registration/error/removeAction")
 	},
 	methods: {
 		submit() {
@@ -337,11 +337,6 @@ form {
 					float: left;
 					width: 45%;
 					margin-left: 5%;
-				}
-
-				&.zip-left {
-					width: 40%;
-					float: left;
 				}
 
 				p {

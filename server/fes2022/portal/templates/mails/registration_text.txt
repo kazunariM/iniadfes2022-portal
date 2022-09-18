@@ -4,7 +4,7 @@ INIAD-FES・WELLB-FES実行委員会です。
 この度は来場者事前登録していただきありがとうございます。
 
 以下の内容に問題がなければこちらのURLを開きメールアドレスの確認をお願い致します。
-{{ protocol }}://{{ domain }}/complete/{{ visitor.management_uuid }}
+{{ protocol }}://{{ domain }}/Registration/Completed/?id={{ visitor.management_uuid }}
 
 
 ==========

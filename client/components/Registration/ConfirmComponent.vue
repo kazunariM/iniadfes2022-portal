@@ -77,6 +77,22 @@ export default {
 				know_about: [],
 				agree: false,
 			},
+			error: {
+				last_name: "",
+				first_name: "",
+				ruby_last_name: "",
+				ruby_first_name: "",
+				email: "",
+				nickname: "",
+				design: "",
+				address: "",
+				gender: "",
+				age: "",
+				job: "",
+				major_subject: "",
+				know_about: "",
+				agree: "",
+			},
 			list: {
 				namecard: [],
 				age: [],
@@ -89,6 +105,9 @@ export default {
 		}
 	},
 	created() {
+		this.$axios.get("/api/v1/initial/").then((res) => {
+			this.$cookies.set("csrftoken", res.data.csrftoken, { path: "/", maxAge: 60 * 60 })
+		})
 		const getFormdata = this.$store.getters["Registration/get"]
 		if (!getFormdata.agree) {
 			this.$router.replace("/Registration/")
@@ -142,10 +161,32 @@ export default {
 				url: "/api/v1/registration/",
 				headers: {
 					"Content-Type": "application/json",
-					// "X-CSRFToken": csrftoken,
+					"X-CSRFToken": this.$cookies.get("csrftoken"),
 				},
 				data: this.formdata,
 			})
+				.then((res) => {
+					this.$store.dispatch("Registration/requested/changeAction", { requested: true })
+					this.$router.replace("/Registration/Requested/")
+				})
+				.catch((error) => {
+					const errData = error.response.data.detail
+					this.error.last_name = "last_name" in errData ? errData.last_name[0] : ""
+					this.error.first_name = "first_name" in errData ? errData.first_name[0] : ""
+					this.error.ruby_last_name = "ruby_last_name" in errData ? errData.ruby_last_name[0] : ""
+					this.error.ruby_first_name = "ruby_first_name" in errData ? errData.ruby_first_name[0] : ""
+					this.error.email = "email" in errData ? errData.email[0] : ""
+					this.error.nickname = "nickname" in errData ? errData.nickname[0] : ""
+					this.error.design = "design" in errData ? errData.design[0] : ""
+					this.error.address = "address" in errData ? errData.address[0] : ""
+					this.error.gender = "gender" in errData ? errData.gender[0] : ""
+					this.error.age = "age" in errData ? errData.age[0] : ""
+					this.error.job = "job" in errData ? errData.job[0] : ""
+					this.error.major_subject = "major_subject" in errData ? errData.major_subject[0] : ""
+					this.error.know_about = "know_about" in errData ? errData.know_about[0] : ""
+					this.$store.dispatch("Registration/error/changeAction", this.error)
+					this.$router.replace("/Registration/")
+				})
 		},
 	},
 }

@@ -35,6 +35,7 @@ export default {
 		// "@nuxtjs/pwa",
 		// https://github.com/nuxt-community/style-resources-module
 		"@nuxtjs/style-resources",
+		"cookie-universal-nuxt",
 	],
 
 	// Axios module configuration: https://go.nuxtjs.dev/config-axios
