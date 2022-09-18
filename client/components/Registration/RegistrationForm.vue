@@ -70,12 +70,12 @@
 					<ul class="namecard-design">
 						<li v-for="(i, index) in list.namecard" :key="index" class="namecardbox">
 							<label>
-								<input v-model="formdata.namecard" :value="i.id" type="radio" required />
+								<input v-model="formdata.design" :value="i.uuid" type="radio" required />
 								<p>{{ i.name }}</p>
 								<div class="namecard-sample">
 									<img :src="i.img" :alt="i.name" />
 								</div>
-								<p>{{ i.description }}</p>
+								<p>{{ i.text }}</p>
 							</label>
 						</li>
 					</ul>
@@ -87,47 +87,48 @@
 					<h3>アンケート</h3>
 					<label>
 						<p>お住まい(都道府県)</p>
-						<p><input v-model="formdata.address" type="text" placeholder="東京都北区" required @focus="removeError('address')" /></p>
+						<select v-model="formdata.address" required>
+							<option v-for="(i, index) in list.address" :key="index" :value="i.value">
+								{{ i.display }}
+							</option>
+						</select>
 					</label>
-					<label class="zip-left">
-						<p>郵便番号から検索場合はこちら</p>
-						<p><input v-model="zip" type="text" placeholder="1150053" @focus="removeError('zip')" @input="findaddress" /></p>
-					</label>
-					<p v-if="error.zip" class="error">⚠{{ error.zip }}</p>
 				</section>
 
-				<section style="clear: both">
+				<section>
+					<p>性別</p>
+					<select v-model="formdata.gender" required>
+						<option v-for="(i, index) in list.gender" :key="index" :value="i.value">
+							{{ i.display }}
+						</option>
+					</select>
+				</section>
+
+				<section>
 					<p>ご年代</p>
 					<select v-model="formdata.age" required>
-						<option value="0">10歳未満</option>
-						<option value="1">10代</option>
-						<option value="2">20代</option>
-						<option value="3">30代</option>
-						<option value="4">40代</option>
-						<option value="5">50代</option>
-						<option value="6">60代</option>
-						<option value="7">70代</option>
-						<option value="8">80歳以上</option>
+						<option v-for="(i, index) in list.age" :key="index" :value="i.value">
+							{{ i.display }}
+						</option>
 					</select>
 				</section>
 
 				<section>
 					<p>ご職業</p>
 					<select v-model="formdata.job" required>
-						<option v-for="(i, index) in list.job" :key="index" :value="i">
-							{{ i }}
+						<option v-for="(i, index) in list.job" :key="index" :value="i.value">
+							{{ i.display }}
 						</option>
 					</select>
 				</section>
 
-				<section>
-					<p>入場予定日</p>
-					<p v-for="(i, index) in list.admission_date" :key="index">
-						<label> <input v-model="formdata.admission_date" :value="i.data" type="checkbox" />{{ i.display }}</label>
-					</p>
-					<ul>
-						<li>現段階のご予定で構いません。ご指定していない日付も入場可能です。</li>
-					</ul>
+				<section v-if="formdata.job == 4 || formdata.job == 5">
+					<p>専攻/希望分野</p>
+					<select v-model="formdata.major_subject">
+						<option v-for="(i, index) in list.major_subject" :key="index" :value="i.value">
+							{{ i.display }}
+						</option>
+					</select>
 				</section>
 
 				<section>
@@ -165,8 +166,9 @@
 						<p>support@iniadfes.com</p>
 					</div>
 					<div class="center">
-						<label class="center"><input v-model="formdata.agree" type="checkbox" />以上の内容を確認しました。</label>
+						<label class="center"><input v-model="formdata.agree" type="checkbox" @focus="removeError('agree')" />以上の内容を確認しました。</label>
 					</div>
+					<p v-if="error.agree" class="error">⚠{{ error.agree }}</p>
 				</section>
 			</fieldset>
 			<div class="center">
@@ -188,12 +190,13 @@ export default {
 				ruby_first_name: "",
 				email: "",
 				nickname: "",
-				nemacard: "",
-				address: "",
-				age: "2",
-				job: "大学生",
+				design: "",
+				address: null,
+				gender: null,
+				age: null,
+				job: null,
+				major_subject: null,
 				know_about: [],
-				admission_date: [],
 				agree: false,
 			},
 			error: {
@@ -203,35 +206,86 @@ export default {
 				ruby_first_name: "",
 				email: "",
 				nickname: "",
-				nemacard: "",
+				design: "",
 				zip: "",
 				address: "",
+				gender: "",
 				age: "",
 				job: "",
+				major_subject: "",
 				know_about: "",
-				admission_date: "",
 				agree: "",
 			},
-			zip: "",
 			list: {
 				namecard: [],
-				job: ["未就学児", "小学生", "中学生", "高校生", "大学生", "大学関係者", "会社員", "教職員", "自営業", "その他"],
-				know_about: ["東洋大学ホームページ", "駅広告", "地域の施設での広告", "学校に配布されたチラシ", "YouTube広告", "Twitter広告", "友人・知人より", "その他"],
-				admission_date: [
-					{
-						data: "2022-10-29",
-						display: "2022/10/29(土)",
-					},
-					{
-						data: "2022-10-30",
-						display: "2022/10/30(日)",
-					},
-				],
+				age: [],
+				job: [],
+				major_subject: [],
+				gender: [],
+				address: [],
+				know_about: [],
 			},
+			confirm: false,
 		}
 	},
+	created() {
+		const getListdata = this.$store.getters["Registration/data/get"]
+		this.list.age = getListdata.age
+		this.list.job = getListdata.job
+		this.list.major_subject = getListdata.major_subject
+		this.list.gender = getListdata.gender
+		this.list.address = getListdata.address
+		this.list.know_about = getListdata.know_about
+		this.$axios.get("/api/v1/namecards").then((res) => {
+			this.list.namecard = res.data
+			this.$store.dispatch("Registration/data/addAction", res.data)
+		})
+
+		const getFormdata = this.$store.getters["Registration/get"]
+		this.formdata.last_name = getFormdata.last_name
+		this.formdata.first_name = getFormdata.first_name
+		this.formdata.ruby_last_name = getFormdata.ruby_last_name
+		this.formdata.ruby_first_name = getFormdata.ruby_first_name
+		this.formdata.email = getFormdata.email
+		this.formdata.nickname = getFormdata.nickname
+		this.formdata.design = getFormdata.design
+		this.formdata.address = getFormdata.address
+		this.formdata.gender = getFormdata.gender
+		this.formdata.age = getFormdata.age
+		this.formdata.job = getFormdata.job
+		this.formdata.major_subject = getFormdata.major_subject
+		this.formdata.know_about = getFormdata.know_about
+		this.formdata.agree = false
+
+		const getErrordata = this.$store.getters["Registration/error/get"]
+		this.error.last_name = getErrordata.last_name
+		this.error.first_name = getErrordata.first_name
+		this.error.ruby_last_name = getErrordata.ruby_last_name
+		this.error.ruby_first_name = getErrordata.ruby_first_name
+		this.error.email = getErrordata.email
+		this.error.nickname = getErrordata.nickname
+		this.error.design = getErrordata.design
+		this.error.address = getErrordata.address
+		this.error.gender = getErrordata.gender
+		this.error.age = getErrordata.age
+		this.error.job = getErrordata.job
+		this.error.major_subject = getErrordata.major_subject
+		this.error.know_about = getErrordata.know_about
+	},
 	methods: {
-		submit() {},
+		submit() {
+			if (!this.formdata.agree) {
+				this.error.agree = "内容を確認してください"
+				return
+			}
+			for (const key in this.error) {
+				if (this.error[key]) {
+					return
+				}
+			}
+			this.$store.dispatch("Registration/addAction", this.formdata)
+			this.$router.replace("/Registration/Confirm/")
+		},
 		removeError(el) {
 			this.error[el] = ""
 		},
@@ -245,18 +299,6 @@ export default {
 			if (this.formdata.nickname.length > 16) {
 				this.error.nickname = "16字以内で入力してください"
 				this.formdata.nickname = this.formdata.nickname.slice(0, 16)
-			}
-		},
-		findaddress() {
-			if (this.zip.length === 7) {
-				this.$axios.get(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${this.zip}`).then((res) => {
-					if (res.data.results) {
-						this.formdata.address = `${res.data.results[0].address1}${res.data.results[0].address2}`
-						this.error.zip = ""
-					} else {
-						this.error.zip = "郵便番号が見つかりませんでした"
-					}
-				})
 			}
 		},
 	},

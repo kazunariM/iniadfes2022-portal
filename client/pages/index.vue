@@ -2,7 +2,7 @@
 	<div>
 		<HeaderView />
 		<section>
-			<nuxt-link to="PreRegistration">事前登録をする</nuxt-link>
+			<nuxt-link to="Registration">事前登録をする</nuxt-link>
 		</section>
 		<section>
 			<nuxt-link to="ScanNamecard">スタンプラリーを見る</nuxt-link>

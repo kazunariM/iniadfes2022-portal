@@ -27,5 +27,6 @@ module.exports = {
 		"no-dupe-class-members": ["error"],
 		"standard/computed-property-even-spacing": "off",
 		"function-paren-newline": ["off", { minItems: 5 }],
+		"vue/multi-word-component-names": "off",
 	},
 }
