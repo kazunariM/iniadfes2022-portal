@@ -3,14 +3,17 @@
 		<h1>来場者登録 完了</h1>
 		<p>来場者登録をしていただきありがとうございます。</p>
 		<table>
-			<tr>
-				<td>ニックネーム</td>
-				<td>{{ nickname }}</td>
-			</tr>
-			<tr>
-				<td>QRコード</td>
-				<td><img :src="qr" alt="受付用QRコード" /></td>
-			</tr>
+			<tbody>
+				<tr>
+					<td>ニックネーム</td>
+					<td>{{ nickname }}</td>
+				</tr>
+				<tr>
+					<td>QRコード</td>
+					<td v-if="qr"><img :src="qr" alt="受付用QRコード" /></td>
+					<td v-else>読み込み中</td>
+				</tr>
+			</tbody>
 		</table>
 		<p>当日はこちらのQRコードを受付でご提示ください。</p>
 		<p>QRコードはご登録されたメールアドレス宛に送信しております。</p>
@@ -21,20 +24,27 @@
 import QRCode from "qrcode"
 export default {
 	neme: "Complated",
+	asyncData({ $axios, route, redirect }) {
+		return $axios
+			.get(`/api/v1/complete/${route.query.id}/`)
+			.then((res) => {
+				return {
+					nickname: res.data.nickname,
+					id: res.data.management_uuid,
+				}
+			})
+			.catch(() => {
+				redirect("/")
+			})
+	},
 	data() {
 		return {
-			nickname: "",
-			id: "",
 			qr: null,
 		}
 	},
 	created() {
-		this.$axios.get(`/api/v1/complete/${this.$route.query.id}/`).then((res) => {
-			this.nickname = res.data.nickname
-			this.id = res.data.management_uuid
-			QRCode.toDataURL(this.id, { width: 400 }).then((code) => {
-				this.qr = code
-			})
+		QRCode.toDataURL(this.id, { width: 400 }).then((code) => {
+			this.qr = code
 		})
 	},
 }

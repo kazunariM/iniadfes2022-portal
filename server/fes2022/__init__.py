@@ -1,0 +1,1 @@
+default_app_config = 'fes2022.apps.Fes2022Config'

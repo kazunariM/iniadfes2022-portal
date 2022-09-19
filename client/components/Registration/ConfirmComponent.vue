@@ -3,50 +3,52 @@
 		<h3>入力内容をご確認ください</h3>
 		<form @submit.prevent="submit">
 			<table>
-				<tr>
-					<td>お名前</td>
-					<td>{{ formdata.last_name }} {{ formdata.first_name }}</td>
-				</tr>
-				<tr>
-					<td>フリガナ</td>
-					<td>{{ formdata.ruby_last_name }} {{ formdata.ruby_first_name }}</td>
-				</tr>
-				<tr>
-					<td>メールアドレス</td>
-					<td>{{ formdata.email }}</td>
-				</tr>
-				<tr>
-					<td>ニックネーム</td>
-					<td>{{ formdata.nickname }}</td>
-				</tr>
-				<tr>
-					<td>ネームカード</td>
-					<td><img :src="get_namecard()" /></td>
-				</tr>
-				<tr>
-					<td>お住まい</td>
-					<td>{{ get_from_arr("address") }}</td>
-				</tr>
-				<tr>
-					<td>性別</td>
-					<td>{{ get_from_arr("gender") }}</td>
-				</tr>
-				<tr>
-					<td>ご年代</td>
-					<td>{{ get_from_arr("age") }}</td>
-				</tr>
-				<tr>
-					<td>ご職業</td>
-					<td>{{ get_from_arr("job") }}</td>
-				</tr>
-				<tr>
-					<td>専攻/希望分野</td>
-					<td>{{ get_from_arr("major_subject") }}</td>
-				</tr>
-				<tr>
-					<td>INIAD-FES・WELLB-FES・このポータルサイトはどこで知りましたか？</td>
-					<td>{{ get_know_about() }}</td>
-				</tr>
+				<tbody>
+					<tr>
+						<td>お名前</td>
+						<td>{{ formdata.last_name }} {{ formdata.first_name }}</td>
+					</tr>
+					<tr>
+						<td>フリガナ</td>
+						<td>{{ formdata.ruby_last_name }} {{ formdata.ruby_first_name }}</td>
+					</tr>
+					<tr>
+						<td>メールアドレス</td>
+						<td>{{ formdata.email }}</td>
+					</tr>
+					<tr>
+						<td>ニックネーム</td>
+						<td>{{ formdata.nickname }}</td>
+					</tr>
+					<tr>
+						<td>ネームカード</td>
+						<td><img :src="get_namecard()" /></td>
+					</tr>
+					<tr>
+						<td>お住まい</td>
+						<td>{{ get_from_arr("address") }}</td>
+					</tr>
+					<tr>
+						<td>性別</td>
+						<td>{{ get_from_arr("gender") }}</td>
+					</tr>
+					<tr>
+						<td>ご年代</td>
+						<td>{{ get_from_arr("age") }}</td>
+					</tr>
+					<tr>
+						<td>ご職業</td>
+						<td>{{ get_from_arr("job") }}</td>
+					</tr>
+					<tr>
+						<td>専攻/希望分野</td>
+						<td>{{ get_from_arr("major_subject") }}</td>
+					</tr>
+					<tr>
+						<td>INIAD-FES・WELLB-FES・このポータルサイトはどこで知りましたか？</td>
+						<td>{{ get_know_about() }}</td>
+					</tr>
+				</tbody>
 			</table>
 			<div>
 				<p @click="back()">修正する</p>
@@ -105,9 +107,11 @@ export default {
 		}
 	},
 	created() {
-		this.$axios.get("/api/v1/initial/").then((res) => {
-			this.$cookies.set("csrftoken", res.data.csrftoken, { path: "/", maxAge: 60 * 60 })
-		})
+		if (!this.$cookies.get("csrftoken")) {
+			this.$axios.get("/api/v1/initial/").then((res) => {
+				this.$cookies.set("csrftoken", res.data.csrftoken, { path: "/", maxAge: 60 * 60 })
+			})
+		}
 		const getFormdata = this.$store.getters["Registration/get"]
 		if (!getFormdata.agree) {
 			this.$router.replace("/Registration/")

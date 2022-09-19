@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'rest_auth.registration',
 
-    'fes2022',
+    'fes2022.apps.Fes2022Config',
     'fes2022.administration',
     'fes2022.portal',
 ]
