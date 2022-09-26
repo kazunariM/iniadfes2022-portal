@@ -1,0 +1,9 @@
+[
+	{
+		"model": "administration.PagesPermission",
+		"fields": {
+			"func": "入退構用QRコード読み取り",
+			"page": "CampusQR"
+		}
+	}
+]

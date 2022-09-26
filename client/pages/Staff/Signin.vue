@@ -17,7 +17,7 @@ export default {
 			.then((res) => {
 				if (res.data.is_authenticated) {
 					redirect("/Staff/")
-				} else {
+				} else if (!$cookies.get("csrftoken")) {
 					return $axios.get("/api/v1/initial/").then((res) => {
 						return {
 							csrftoken: $cookies.set("csrftoken", res.data.csrftoken, { path: "/", maxAge: 60 * 60 }),

@@ -1,5 +1,12 @@
 from rest_framework import serializers
 
+from ..models import PagesPermission
+
+
+class PagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PagesPermission
+        fields = ['func', 'page']
 
 class UserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=255)

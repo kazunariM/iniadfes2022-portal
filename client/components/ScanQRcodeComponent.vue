@@ -4,6 +4,7 @@
 		<p v-if="Loading">カメラを読み込んでいます</p>
 		<canvas ref="canvas"></canvas>
 		<p>{{ QR_DATA }}</p>
+		<button @click="SwitchCamera">カメラを切り替える</button>
 	</section>
 </template>
 
@@ -12,6 +13,12 @@ import jsQR from "~/assets/js/jsQR.js"
 
 export default {
 	name: "ScanQRcodeComponent",
+	props: {
+		timeout: {
+			type: Number,
+			default: 3000,
+		},
+	},
 	data() {
 		return {
 			NoPermission: true,
@@ -19,9 +26,12 @@ export default {
 			canvas: null,
 			context: null,
 			video: null,
+			stream: null,
 
 			imageData: null,
 			code: null,
+
+			Out: true,
 
 			QR_DATA: "",
 		}
@@ -31,6 +41,9 @@ export default {
 		this.context = this.canvas.getContext("2d")
 		this.video = document.createElement("video")
 		this.StartCamera()
+	},
+	destroyed() {
+		this.StopCamera()
 	},
 	methods: {
 		drawLine(begin, end, color) {
@@ -66,7 +79,10 @@ export default {
 					this.drawLine(this.code.location.bottomRightCorner, this.code.location.bottomLeftCorner, "#FF3B58")
 					this.drawLine(this.code.location.bottomLeftCorner, this.code.location.topLeftCorner, "#FF3B58")
 					this.QR_DATA = this.code.data
-					setTimeout(this.clear, 3000)
+					if (this.code.data) {
+						this.$emit("func", this.code.data)
+					}
+					setTimeout(this.clear, this.timeout)
 				} else {
 					requestAnimationFrame(this.tick)
 				}
@@ -75,12 +91,29 @@ export default {
 			}
 		},
 		StartCamera() {
-			navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then((stream) => {
-				this.video.srcObject = stream
-				this.video.setAttribute("playsinline", true)
-				this.video.play()
-				requestAnimationFrame(this.tick)
+			navigator.mediaDevices
+				.getUserMedia({ video: { facingMode: this.Out ? { exact: "environment" } : "user", frameRate: { ideal: 5, max: 15 } } })
+				.then((stream) => {
+					this.stream = stream
+					this.video.srcObject = this.stream
+					this.video.setAttribute("playsinline", true)
+					this.video.play()
+					requestAnimationFrame(this.tick)
+				})
+				.catch(() => {
+					this.Out = !this.Out
+					this.StartCamera()
+				})
+		},
+		StopCamera() {
+			this.stream.getVideoTracks().forEach((track) => {
+				track.stop()
 			})
+		},
+		SwitchCamera() {
+			this.StopCamera()
+			this.Out = !this.Out
+			this.StartCamera()
 		},
 	},
 }

@@ -93,7 +93,7 @@ class PlaceID(models.Model):
 
 
 class NowCampus(models.Model):
-    visitor = models.ForeignKey(Visitor, on_delete=models.PROTECT, related_name="nowcampus", verbose_name="VisitorのユーザID(id)との紐づけ")
+    visitor = models.ForeignKey(Visitor, on_delete=models.PROTECT, related_name="nowcampus", verbose_name="来場者")
     scanned_at = models.DateTimeField(default=timezone.now, verbose_name="日時")
     inorout = models.BooleanField(default=True, verbose_name="入構or退構")
     count = models.IntegerField(default=0, verbose_name="今の人数")
@@ -105,8 +105,8 @@ class NowCampus(models.Model):
         
 
 class NowRoom(models.Model):
-    visitor = models.ForeignKey(Visitor, on_delete=models.PROTECT, related_name="nowroom", verbose_name="VisitorのユーザID(id)との紐づけ")
-    room = models.ForeignKey(Room, on_delete=models.PROTECT, related_name="nowroom", verbose_name="Roomの教室ID(id)との紐づけ")
+    visitor = models.ForeignKey(Visitor, on_delete=models.PROTECT, related_name="nowroom", verbose_name="来場者")
+    room = models.ForeignKey(Room, on_delete=models.PROTECT, related_name="nowroom", verbose_name="教室")
     scanned_at = models.DateTimeField(default=timezone.now, verbose_name="日時")
     inorout = models.BooleanField(default=True, verbose_name="入室or退室")
 

@@ -47,15 +47,17 @@ INSTALLED_APPS = [
     'allauth.account',
     'rest_auth',
     'rest_auth.registration',
+    'corsheaders',
 
     'fes2022.apps.Fes2022Config',
-    'fes2022.administration',
-    'fes2022.portal',
+    'fes2022.administration.apps.AdministrationConfig',
+    'fes2022.portal.apps.PortalConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -174,3 +176,12 @@ ADMINS = [('developer', env('ADMIN_EMAIL', str))] if env('IS_SEND_EMAIL', int) e
 
 # Auth
 SITE_ID = 1
+LOGIN_URL = '/'
+
+
+# CORS Domain
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
+

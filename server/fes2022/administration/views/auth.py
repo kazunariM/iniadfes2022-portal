@@ -1,10 +1,11 @@
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions
-from django.middleware.csrf import get_token
+from rest_framework import authentication
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
+from ..models import PagesPermission
 from ..serializers import auth as serializer_auth
 
 User = get_user_model()
@@ -15,6 +16,19 @@ class CheckUserAPI(APIView):
 
     def get(self, request):
         return Response({'is_authenticated' : request.user.is_authenticated})
+
+
+class StaffMenuAPI(ListAPIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    serializer_class = serializer_auth.PagesSerializer
+
+    def get_queryset(self):
+        return self.request.user.pages.all()
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['is_authenticated'] = self.request.user.is_authenticated
+        return context
 
 
 class SessionView(APIView):
@@ -34,3 +48,12 @@ class LogoutView(APIView):
         logout(request)
         return Response({})
 
+
+class PagePermissionAPI(APIView):
+    def get(self, request, page):
+        if request.user.is_superuser:
+            return Response({'result' : True})
+        elif request.user.is_authenticated:
+            return Response({'result' : request.user in PagesPermission.objects.get(page=page).users.all()})
+        else:
+            return Response({}, status=404)
