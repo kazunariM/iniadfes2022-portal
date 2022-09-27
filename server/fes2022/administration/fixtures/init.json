@@ -5,5 +5,26 @@
 			"func": "入退構用QRコード読み取り",
 			"page": "CampusQR"
 		}
+	},
+	{
+		"model": "administration.PagesPermission",
+		"fields": {
+			"func": "教室用QRコード読み取り",
+			"page": "ReadQRinRoom"
+		}
+	},
+	{
+		"model": "administration.PagesPermission",
+		"fields": {
+			"func": "ネームカード発行",
+			"page": "HandoverNamecard"
+		}
+	},
+	{
+		"model": "administration.PagesPermission",
+		"fields": {
+			"func": "人数確認",
+			"page": "Watching"
+		}
 	}
 ]

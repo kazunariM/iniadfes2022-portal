@@ -23,7 +23,7 @@ class StaffMenuAPI(ListAPIView):
     serializer_class = serializer_auth.PagesSerializer
 
     def get_queryset(self):
-        return self.request.user.pages.all()
+        return PagesPermission.objects.all() if self.request.user.is_superuser else self.request.user.pages.all()
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
