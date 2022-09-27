@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.sessions.models import Session
 from django.contrib.postgres.fields import ArrayField
 import uuid, os
 
@@ -32,11 +31,18 @@ class NamecardDesign(models.Model):
     text = models.TextField(verbose_name="デザインの説明")
 
     def __str__(self):
-        return f'{"WELLB" if self.campus else "INIAD"} - {self.name}'
+        return f'{self.name}({"WELLB" if self.campus else "INIAD"})'
+
+
+class NamecardPool(models.Model):
+    qrid = models.UUIDField(default=uuid.uuid4, db_index=True, unique=True)
+    namecard = models.ForeignKey(NamecardDesign, on_delete=models.PROTECT, related_name="pool")
+    used = models.BooleanField(default=False, verbose_name="指定済みかどうか")
 
 
 class Visitor(models.Model):
-    userid = models.UUIDField(default=uuid.uuid4, db_index=True, unique=True, verbose_name="QRコードのID")
+    identifying = models.IntegerField(null=True, blank=True, verbose_name="識別番号")
+    userid = models.UUIDField(null=True, blank=True, db_index=True, unique=True, verbose_name="QRコードのID")
     management_uuid = models.UUIDField(default=uuid.uuid4, unique=True, verbose_name="管理用uuid")
     nickname = models.CharField(max_length=20, verbose_name="ニックネーム")
     first_name = models.CharField(max_length=20, verbose_name="名")
@@ -58,10 +64,10 @@ class Visitor(models.Model):
     is_preregistration = models.BooleanField(default=False, verbose_name="事前登録かどうか")
     is_printed = models.BooleanField(default=False, verbose_name="印刷完了かどうか")
     is_handedover = models.BooleanField(default=False, verbose_name="お渡し済みかどうか")
-    session = models.ForeignKey(Session, blank=True, null=True, on_delete=models.SET_NULL)
+    id_data = models.OneToOneField(NamecardPool, null=True, blank=True, on_delete=models.PROTECT, related_name="visitor")
 
     def __str__(self):
-        return f'{self.pk} - {self.nickname}'
+        return f'{self.pk} {self.nickname}'
 
 
 class Room(models.Model):
@@ -78,7 +84,7 @@ class Room(models.Model):
     total_count = models.IntegerField(default=0, verbose_name="総延べ人数")
 
     def __str__(self):
-        return f'{"WELLB" if self.campus else "INIAD"} - {self.groupname}'
+        return f'{self.groupname}({"WELLB" if self.campus else "INIAD"})'
         
 
 class PlaceID(models.Model):
@@ -101,7 +107,7 @@ class NowCampus(models.Model):
     total_count = models.IntegerField(default=0, verbose_name="総延べ人数")
 
     def __str__(self):
-        return f'{"入構" if self.inorout else "退構"} - {self.scanned_at}'
+        return f'{"入構" if self.inorout else "退構"} {self.scanned_at}'
         
 
 class NowRoom(models.Model):
@@ -111,7 +117,7 @@ class NowRoom(models.Model):
     inorout = models.BooleanField(default=True, verbose_name="入室or退室")
 
     def __str__(self):
-        return f'{self.scanned_at} - {"入室" if self.inorout else "退室"} - {self.room.groupname}'
+        return f'{"入室" if self.inorout else "退室"} {self.room.groupname} {self.scanned_at}'
 
 
 class Area(models.Model):

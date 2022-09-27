@@ -5,7 +5,7 @@ from . import models
 
 
 class VisitorAdmin(admin.ModelAdmin):
-    readonly_fields = ("pk", "management_uuid", "userid", "created_at", "session")
+    readonly_fields = ("pk", "management_uuid", "userid", "created_at",)
     list_display = ("pk", "last_name", "first_name", "is_handedover", "is_preregistration", "is_verified_email","created_at")
     list_filter = ("is_handedover", "is_preregistration",)
     list_display_links = ("pk", "last_name", )
@@ -20,6 +20,7 @@ class RoomAdmin(admin.ModelAdmin):
     search_fields = ("groupname",)
 
 admin.site.register(models.NamecardDesign)
+admin.site.register(models.NamecardPool)
 
 admin.site.register(models.Visitor, VisitorAdmin)
 admin.site.register(models.Room, RoomAdmin)

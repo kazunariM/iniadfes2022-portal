@@ -1,6 +1,6 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 
-from .models import Visitor
+from .models import NamecardDesign, NamecardPool, Visitor
 
 import urllib, json, os
 
@@ -31,3 +31,23 @@ def CreateVisitorSignal(sender, instance, created, **kwargs):
             post_message(os.environ.get('SLACK_URL'), context)
 
 post_save.connect(CreateVisitorSignal, Visitor)
+
+
+def UpdateRegistrationNamecardSignal(sender, instance, **kwargs):
+    namecarddesign = NamecardDesign.objects.filter(pk=instance.pk).first()
+    if namecarddesign:
+        amount = namecarddesign.numofprints - instance.numofprints
+        if amount > 0:
+            NamecardPool.objects.bulk_create([NamecardPool(namecard=namecarddesign) for _ in range(amount)])
+        elif amount < 0:
+            instance.numofprints = namecarddesign.numofprints
+
+pre_save.connect(UpdateRegistrationNamecardSignal, NamecardDesign)
+
+
+def CreateRegistrationNamecardSignal(sender, instance, created, **kwargs):
+    if created:
+        namecarddesign = NamecardDesign.objects.get(pk=instance.pk)
+        NamecardPool.objects.bulk_create([NamecardPool(namecard=namecarddesign) for _ in range(instance.numofprints)])
+
+post_save.connect(CreateRegistrationNamecardSignal, NamecardDesign)
