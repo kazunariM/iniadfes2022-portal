@@ -23,6 +23,7 @@
 <script>
 import QRCode from "qrcode"
 export default {
+	layout: "portal",
 	neme: "Complated",
 	asyncData({ $axios, route, redirect }) {
 		return $axios

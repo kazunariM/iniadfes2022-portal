@@ -66,4 +66,14 @@ export default {
 	publicRuntimeConfig: {
 		API_URL: process.env.API_URL,
 	},
+
+	router: {
+		extendRoutes(routes, resolve) {
+			routes.push({
+				name: "404error",
+				path: "*",
+				component: resolve("~/pages/404.vue"),
+			})
+		},
+	},
 }

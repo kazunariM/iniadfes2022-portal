@@ -9,6 +9,7 @@
 <script>
 export default {
 	name: "Requested",
+	layout: "portal",
 	created() {
 		const getData = this.$store.getters["Registration/requested/get"]
 		if (!getData.requested) {

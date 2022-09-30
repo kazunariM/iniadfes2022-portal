@@ -155,14 +155,14 @@
 						<li>
 							第三者提供
 							<ul>
-								<li>第三者提供は一切致しません</li>
+								<li>第三者提供は一切いたしません</li>
 							</ul>
 						</li>
 					</ol>
 					<p>ご不明点等ございましたら以下の連絡先にご連絡ください。</p>
 					<div class="contact">
-						<p>〒115-0053</p>
-						<p>東京都北区赤羽台東京都北区赤羽台1丁目7-11</p>
+						<p>〒115-8650</p>
+						<p>東京都北区赤羽台1丁目7-11 INIAD HUB-1</p>
 						<p>support@iniadfes.com</p>
 					</div>
 					<div class="center">
@@ -235,10 +235,7 @@ export default {
 		this.list.gender = getListdata.gender
 		this.list.address = getListdata.address
 		this.list.know_about = getListdata.know_about
-		this.$axios.get("/api/v1/namecards").then((res) => {
-			this.list.namecard = res.data
-			this.$store.dispatch("Registration/data/addAction", res.data)
-		})
+		this.list.namecard = getListdata.namecard
 
 		const getFormdata = this.$store.getters["Registration/get"]
 		this.formdata.last_name = getFormdata.last_name
