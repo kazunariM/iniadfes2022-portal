@@ -1,5 +1,5 @@
 <template>
-	<article>
+	<main>
 		<h1>ネームカードお渡し</h1>
 		<ScanQRcodeComponent :timeout="2000" @func="reception"></ScanQRcodeComponent>
 		<p v-if="msg">{{ msg }}</p>
@@ -11,7 +11,7 @@
 			<p>{{ identifying }}</p>
 			<p @click="completed">お渡し完了</p>
 		</div>
-	</article>
+	</main>
 </template>
 
 <script>

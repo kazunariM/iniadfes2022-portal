@@ -1,5 +1,5 @@
 <template>
-	<article>
+	<main>
 		<h1>INIAD-FES Portalサイト</h1>
 		<section v-if="is_before">
 			<h2>事前予約はこちらから</h2>
@@ -14,7 +14,7 @@
 				<p>スタンプラリー</p>
 			</section>
 		</section>
-	</article>
+	</main>
 </template>
 
 <script>

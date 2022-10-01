@@ -1,6 +1,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 from .views import auth as views_auth
+from .views import campus as views_campus
 from .views import qr as views_qr
 from .views import reception as views_reception
 
@@ -13,6 +14,9 @@ urlpatterns = [
     # 管理画面トップ関連
     path('v1/staff/menu/', views_auth.StaffMenuAPI.as_view(), name="staff_menu"),
     path('v1/staff/pages/<str:page>/', views_auth.PagePermissionAPI.as_view(), name="staff_pages"),
+
+    # 入退構のQRリーダー関連
+    path('v1/staff/campusqr/<str:mode>/', views_campus.CampusAPI.as_view(), name='staff_campusqr'),
 
     # 教室のQRリーダー関連
     path('v1/staff/existplaceid/<int:placeid>/', views_qr.ExistPlaceid.as_view(), name="staff_existplaceid"),
