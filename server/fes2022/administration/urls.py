@@ -9,12 +9,17 @@ urlpatterns = [
     path('v1/staff/login/', views_auth.SessionView.as_view(), name="staff_login"),
     path('v1/staff/logout/', views_auth.LogoutView.as_view(), name="staff_logout"),
     path('v1/staff/check/', views_auth.CheckUserAPI.as_view(), name="staff_check"),
+
+    # 管理画面トップ関連
     path('v1/staff/menu/', views_auth.StaffMenuAPI.as_view(), name="staff_menu"),
     path('v1/staff/pages/<str:page>/', views_auth.PagePermissionAPI.as_view(), name="staff_pages"),
 
+    # 教室のQRリーダー関連
+    path('v1/staff/existplaceid/<int:placeid>/', views_qr.ExistPlaceid.as_view(), name="staff_existplaceid"),
     path('v1/staff/readyroomqr_answer/<int:placeid>/', views_qr.ReadyRoomQRAPI.as_view(), name="staff_readyroomqr_answer"),
     path('v1/staff/roomqr/', views_qr.RoomQRAPI.as_view(), name="staff_roomqr"),
 
+    # 受付のネームカード発行関連
     path('v1/staff/reception/confirmvisitor/<uuid:management_uuid>/', views_reception.ConfirmVisitorAPI.as_view(), name="staff_confirmvisitor"),
     path('v1/staff/reception/selectnamecard/', views_reception.SelectNamecardAPI.as_view(), name="staff_selectnamecard"),
     path('v1/staff/reception/handover/<uuid:management_uuid>/', views_reception.HandedoverAPI.as_view(), name="staff_handover"),

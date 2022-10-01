@@ -4,6 +4,20 @@ from ..models import ReadyRoomQRdevice
 from ... import models
 
 
+class RoomGroupnameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Room
+        fields = ['groupname', 'campus', 'floor']
+
+
+class PlaceidSerializer(serializers.ModelSerializer):
+    room = RoomGroupnameSerializer()
+    
+    class Meta:
+        model = models.PlaceID
+        fields = ['placeid', 'room']
+
+
 class ReadyRoomQRSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReadyRoomQRdevice

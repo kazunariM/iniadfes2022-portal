@@ -46,7 +46,7 @@ export default {
 	},
 
 	proxy: {
-		"/api/": { target: process.env.API_URL },
+		"/api/": { target: process.env.FRONT_BASE_URL },
 	},
 
 	// PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -62,10 +62,6 @@ export default {
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {},
-
-	publicRuntimeConfig: {
-		API_URL: process.env.API_URL,
-	},
 
 	router: {
 		extendRoutes(routes, resolve) {

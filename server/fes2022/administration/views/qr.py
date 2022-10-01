@@ -1,16 +1,26 @@
 from rest_framework.views import APIView
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
 from django.shortcuts import get_list_or_404
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.utils import timezone
 
 from ..serializers import qr as serializers
-from ..models import ReadyRoomQRdevice
+from ..models import PagesPermission, ReadyRoomQRdevice
 from ... import models
 
 
-class ReadyRoomQRAPI(RetrieveUpdateAPIView):
+class ExistPlaceid(UserPassesTestMixin, RetrieveAPIView):
+    serializer_class = serializers.PlaceidSerializer
+    queryset = models.PlaceID
+    lookup_field = 'placeid'
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='ReadQRinRoom').users.all()
+
+
+class ReadyRoomQRAPI(UserPassesTestMixin, RetrieveUpdateAPIView):
     queryset = ReadyRoomQRdevice
     serializer_class = serializers.ReadyRoomQRSerializer
     lookup_field = 'placeid'
@@ -26,8 +36,11 @@ class ReadyRoomQRAPI(RetrieveUpdateAPIView):
     def perform_update(self, serializer):
         serializer.save(ts=timezone.now() if serializer.validated_data['ready'] else None)
 
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='ReadQRinRoom').users.all()
 
-class RoomQRAPI(APIView):
+
+class RoomQRAPI(UserPassesTestMixin, APIView):
     serializer_class = serializers.RoomQRSerializer
 
     def post(self, request, format=None):
@@ -47,3 +60,7 @@ class RoomQRAPI(APIView):
             return Response({'nickname':nowroom.visitor.nickname, 'inorout':nowroom.inorout}, status=201)
 
         return Response({}, status=404)
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='ReadQRinRoom').users.all()
+

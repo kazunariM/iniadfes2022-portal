@@ -25,10 +25,8 @@ class StaffMenuAPI(ListAPIView):
     def get_queryset(self):
         return PagesPermission.objects.all() if self.request.user.is_superuser else self.request.user.pages.all()
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['is_authenticated'] = self.request.user.is_authenticated
-        return context
+    def test_func(self):
+        return self.request.user.is_authenticated
 
 
 class SessionView(APIView):
@@ -56,4 +54,4 @@ class PagePermissionAPI(APIView):
         elif request.user.is_authenticated:
             return Response({'result' : request.user in PagesPermission.objects.get(page=page).users.all()})
         else:
-            return Response({}, status=404)
+            return Response({}, status=403)
