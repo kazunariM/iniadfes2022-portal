@@ -2,17 +2,23 @@ from rest_framework.generics import RetrieveAPIView, UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from django.contrib.auth.mixins import UserPassesTestMixin
+
 from ... import models
+from ..models import PagesPermission
 from ..serializers import reception as serializers
 
 
-class ConfirmVisitorAPI(RetrieveAPIView):
+class ConfirmVisitorAPI(UserPassesTestMixin, RetrieveAPIView):
     serializer_class = serializers.ConfirmVisitorSerializer
     lookup_field = 'management_uuid'
     queryset = models.Visitor
 
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='HandoverNamecard').users.all()
 
-class SelectNamecardAPI(APIView):
+
+class SelectNamecardAPI(UserPassesTestMixin, APIView):
     serializer_class = serializers.SelectNamecardSerializer
 
     def post(self, request):
@@ -30,8 +36,15 @@ class SelectNamecardAPI(APIView):
         
         return Response({}, status=400)
 
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='HandoverNamecard').users.all()
 
-class HandedoverAPI(UpdateAPIView):
+
+class HandedoverAPI(UserPassesTestMixin, UpdateAPIView):
     serializer_class = serializers.HandedoverSerializer
     lookup_field = 'management_uuid'
     queryset = models.Visitor
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='HandoverNamecard').users.all()
+

@@ -61,7 +61,7 @@ export default {
 				const qrid = qr.match(/https:\/\/portal.iniadfes.com\/open\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/)
 				this.$axios({
 					method: "post",
-					url: `${this.$config.API_URL}/api/v1/staff/reception/selectnamecard/`,
+					url: "api/v1/staff/reception/selectnamecard/",
 					headers: {
 						"Content-Type": "application/json",
 						"X-CSRFToken": this.$cookies.get("csrftoken"),
@@ -82,7 +82,7 @@ export default {
 			if (this.step === 2) {
 				this.$axios({
 					method: "patch",
-					url: `${this.$config.API_URL}/api/v1/staff/reception/handover/${this.management_uuid}/`,
+					url: `/api/v1/staff/reception/handover/${this.management_uuid}/`,
 					headers: {
 						"Content-Type": "application/json",
 						"X-CSRFToken": this.$cookies.get("csrftoken"),
