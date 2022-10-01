@@ -2,8 +2,15 @@
 	{
 		"model": "administration.PagesPermission",
 		"fields": {
-			"func": "入退構用QRコード読み取り",
-			"page": "CampusQR"
+			"func": "入構用QRコード読み取り",
+			"page": "EnterCampusQR"
+		}
+	},
+	{
+		"model": "administration.PagesPermission",
+		"fields": {
+			"func": "退構用QRコード読み取り",
+			"page": "ExitCampusQR"
 		}
 	},
 	{

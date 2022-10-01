@@ -1,12 +1,12 @@
 <template>
-	<article>
+	<main>
 		<form @submit.prevent="signin">
 			<p v-if="error">{{ error }}</p>
 			<input v-model="username" type="text" placeholder="ユーザー名" />
 			<input v-model="password" type="password" placeholder="パスワード" />
 			<button type="submit">送信</button>
 		</form>
-	</article>
+	</main>
 </template>
 
 <script>

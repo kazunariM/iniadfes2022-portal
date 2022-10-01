@@ -1,5 +1,5 @@
 <template>
-	<article>
+	<main>
 		<h1>入退室リーダー</h1>
 		<section v-if="!is_check">
 			<h2>セットアップ</h2>
@@ -35,7 +35,7 @@
 				<p>{{ inorout }}</p>
 			</Inya>
 		</section>
-	</article>
+	</main>
 </template>
 
 <script>

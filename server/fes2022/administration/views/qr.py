@@ -47,12 +47,13 @@ class RoomQRAPI(UserPassesTestMixin, APIView):
         serializer = serializers.RoomQRSerializer(data=request.data)
         if serializer.is_valid():
             visitor = models.Visitor.objects.get(userid=serializer.data['visitor'])
+            room = models.PlaceID.objects.get(placeid=serializer.data['placeid']).room
             history_last = models.NowRoom.objects.filter(visitor=visitor).last()
             inorout = (not history_last.inorout) if history_last else True
 
             nowroom = models.NowRoom(
                 visitor=visitor,
-                room=models.PlaceID.objects.get(placeid=serializer.data['placeid']).room,
+                room=room,
                 inorout=inorout,
             )
             nowroom.save()

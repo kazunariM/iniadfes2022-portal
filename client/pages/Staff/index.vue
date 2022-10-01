@@ -1,11 +1,11 @@
 <template>
-	<article>
+	<main>
 		<h1>スタッフメニュー</h1>
 		<ul v-if="pages">
 			<li v-for="(page, index) in pages" :key="index" @click="move(page.page)">{{ page.func }}</li>
 		</ul>
 		<p v-if="!pages.length">割り当てられた権限がありません。</p>
-	</article>
+	</main>
 </template>
 
 <script>
