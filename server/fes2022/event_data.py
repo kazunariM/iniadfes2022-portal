@@ -5,6 +5,11 @@ import datetime
 PREREGISTRATION = datetime.date(2022, 10, 26)
 
 
+# QRコード読み取りインターバル
+CAMPUSQR_INTERVAL = 3 * 60
+ROOMQR_INTERVAL = 10
+
+
 ADDRESS_CHOICES = [
     (1, "東京都（北区）"),
     (2, "東京都（23区）"),

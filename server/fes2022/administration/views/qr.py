@@ -9,6 +9,7 @@ from django.utils import timezone
 from ..serializers import qr as serializers
 from ..models import PagesPermission, ReadyRoomQRdevice
 from ... import models
+from ... import event_data
 
 
 class ExistPlaceid(UserPassesTestMixin, RetrieveAPIView):
@@ -45,20 +46,76 @@ class RoomQRAPI(UserPassesTestMixin, APIView):
 
     def post(self, request, format=None):
         serializer = serializers.RoomQRSerializer(data=request.data)
+
         if serializer.is_valid():
-            visitor = models.Visitor.objects.get(userid=serializer.data['visitor'])
-            room = models.PlaceID.objects.get(placeid=serializer.data['placeid']).room
-            history_last = models.NowRoom.objects.filter(visitor=visitor).last()
-            inorout = (not history_last.inorout) if history_last else True
+            visitor = models.Visitor.objects.filter(userid=serializer.data['visitor']).last()
+            place_data = models.PlaceID.objects.filter(placeid=serializer.data['placeid']).last()
 
-            nowroom = models.NowRoom(
-                visitor=visitor,
-                room=room,
-                inorout=inorout,
-            )
-            nowroom.save()
+            if visitor and place_data:
+                room = place_data.room
+                history_last = models.NowRoom.objects.filter(visitor=visitor).last()
 
-            return Response({'nickname':nowroom.visitor.nickname, 'inorout':nowroom.inorout}, status=201)
+                if history_last:
+
+                    if history_last.room == room:
+                        if (timezone.now() - history_last.scanned_at).seconds < event_data.ROOMQR_INTERVAL:
+                            return Response({"detail":"重複して読み取られてしまっています"}, status=400)
+
+                        if history_last.inorout:
+                            inorout = False
+                            count = room.count - 1
+                            unique_count = room.unique_count
+                            total_count = room.total_count
+                        else:
+                            inorout = True
+                            count = room.count + 1
+                            unique_count = room.unique_count
+                            total_count = room.total_count + 1
+                    else:
+                        history_visitor_room_last = models.NowRoom.objects.filter(visitor=visitor, room=room)
+
+                        if history_last.inorout:
+                            nowroom_tmp = models.NowRoom(
+                                visitor=visitor,
+                                room=history_last.room,
+                                inorout=False,
+                                count=history_last.room.count - 1,
+                                unique_count=history_last.room.unique_count,
+                                total_count=history_last.room.total_count
+                            )
+                            nowroom_tmp.save()
+
+                            room_tmp = history_last.room
+                            room_tmp.count = room_tmp.count - 1
+                            room_tmp.save()
+                        
+                        inorout = True
+                        count=room.count + 1
+                        total_count = room.total_count + 1
+                        unique_count = room.unique_count + (0 if history_visitor_room_last else 1)
+                                                    
+                else:
+                    inorout = True
+                    count = room.count + 1
+                    unique_count = room.unique_count + 1
+                    total_count = room.total_count + 1
+
+                nowroom = models.NowRoom(
+                    visitor=visitor,
+                    room=room,
+                    count=count,
+                    inorout=inorout,
+                    unique_count=unique_count,
+                    total_count=total_count
+                )
+                nowroom.save()
+
+                room.count=count
+                room.unique_count=unique_count
+                room.total_count=total_count
+                room.save()
+
+                return Response({'nickname':nowroom.visitor.nickname, 'inorout':nowroom.inorout}, status=201)
 
         return Response({}, status=404)
 
