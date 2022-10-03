@@ -115,6 +115,9 @@ class NowRoom(models.Model):
     room = models.ForeignKey(Room, on_delete=models.PROTECT, related_name="nowroom", verbose_name="教室")
     scanned_at = models.DateTimeField(default=timezone.now, verbose_name="日時")
     inorout = models.BooleanField(default=True, verbose_name="入室or退室")
+    count = models.IntegerField(default=0, verbose_name="今の人数")
+    unique_count = models.IntegerField(default=0, verbose_name="総人数")
+    total_count = models.IntegerField(default=0, verbose_name="総延べ人数")
 
     def __str__(self):
         return f'{"入室" if self.inorout else "退室"} {self.room.groupname} {self.scanned_at}'

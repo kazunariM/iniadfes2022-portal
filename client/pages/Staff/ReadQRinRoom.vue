@@ -5,7 +5,7 @@
 			<h2>セットアップ</h2>
 			<section v-if="send_placeid">
 				<h3>場所IDを入力してください</h3>
-				<form @submit.prevent="Ready"><input v-model="placeid" placeholder="1022021" required /><button type="submit">送信</button></form>
+				<p><input v-model="placeid" placeholder="1022021" required /><button @click="CheckPlaceid">送信</button></p>
 			</section>
 			<section v-if="!send_placeid">
 				<h3>以下の内容に間違いがなく設置が完了したらOKを押してください</h3>

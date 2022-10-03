@@ -3,6 +3,10 @@ export default {
 	// Target: https://go.nuxtjs.dev/config-target
 	target: "server",
 
+	htmlAttrs: {
+		lang: "ja",
+	},
+
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	head: {
 		title: "INIAD-FES2022",
