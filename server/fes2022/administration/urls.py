@@ -4,6 +4,7 @@ from .views import auth as views_auth
 from .views import campus as views_campus
 from .views import qr as views_qr
 from .views import reception as views_reception
+from .views import watching as views_watching
 
 
 urlpatterns = [
@@ -27,4 +28,8 @@ urlpatterns = [
     path('v1/staff/reception/confirmvisitor/<uuid:management_uuid>/', views_reception.ConfirmVisitorAPI.as_view(), name="staff_confirmvisitor"),
     path('v1/staff/reception/selectnamecard/', views_reception.SelectNamecardAPI.as_view(), name="staff_selectnamecard"),
     path('v1/staff/reception/handover/<uuid:management_uuid>/', views_reception.HandedoverAPI.as_view(), name="staff_handover"),
+    
+    # 人数確認
+    path('v1/staff/watching/campus/', views_watching.CampusPeopleAPI.as_view(), name='staff_watching_campus'),
+    path('v1/staff/watching/room/', views_watching.RoomPeopleAPI.as_view(), name='staff_watching_room'),
 ]
