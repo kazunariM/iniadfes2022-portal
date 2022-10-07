@@ -267,7 +267,3 @@ Temporary Items
 
 
 org-chimata-ssl-certs/
-*.prod.*
-[Dd]ocker*
-*.sh
-nginx/

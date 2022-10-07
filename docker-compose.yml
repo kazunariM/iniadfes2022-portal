@@ -1,0 +1,56 @@
+version: "3"
+services:
+  backend:
+    build: ./server
+    links:
+      - "postgres"
+    env_file:
+      - ".env"
+    volumes:
+      - ./server:${APP_ROOT}
+      - static:${STATIC_ROOT}
+      - media:${MEDIA_ROOT}
+    # restart: always
+
+  frontend:
+    build: ./client
+    env_file:
+      - ".env"
+    volumes:
+      - ./client:${APP_ROOT}
+      - ${APP_ROOT}/node_modules
+      - client:${APP_ROOT}/dist
+    # restart: always
+
+  postgres:
+    image: postgres:14
+    env_file:
+      - ".env"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # restart: always
+
+  nginx:
+    image: nginx
+    env_file:
+      - ".env"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/templates/default.conf.template
+      - static:$STATIC_ROOT
+      - media:$MEDIA_ROOT
+    links:
+      - backend
+      - frontend
+    ports:
+      - 80:80
+    # restart: always
+
+volumes:
+  static:
+    driver: local
+  media:
+    driver: local
+  client:
+    driver: local
+  pgdata:
+    driver: local
