@@ -71,7 +71,7 @@ class CompleteView(RetrieveAPIView):
             message = render_to_string('mails/send_management_QR_text.txt', context)
 
             email = EmailMessage(subject, message, os.environ.get('EMAIL_HOST_USER'), [visitor.email])
-            email.attach('受付用QRコード.png', img_bytes.getvalue())
+            email.attach('受付用二次元コード.png', img_bytes.getvalue())
             email.send()
 
         return visitor

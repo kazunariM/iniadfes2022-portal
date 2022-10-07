@@ -9,14 +9,14 @@
 					<td>{{ nickname }}</td>
 				</tr>
 				<tr>
-					<td>QRコード</td>
-					<td v-if="qr"><img :src="qr" alt="受付用QRコード" /></td>
+					<td>二次元コード</td>
+					<td v-if="qr"><img :src="qr" alt="受付用二次元コード" /></td>
 					<td v-else>読み込み中</td>
 				</tr>
 			</tbody>
 		</table>
-		<p>当日はこちらのQRコードを受付でご提示ください。</p>
-		<p>QRコードはご登録されたメールアドレス宛に送信しております。</p>
+		<p>当日はこちらの二次元コードを受付でご提示ください。</p>
+		<p>二次元コードはご登録されたメールアドレス宛に送信しております。</p>
 	</main>
 </template>
 

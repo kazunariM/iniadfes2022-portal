@@ -3,6 +3,7 @@ from rest_framework.response import Response
 
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.utils import timezone
+from django.db import transaction
 
 from ..serializers import campus as serializers
 from ... import models
@@ -13,6 +14,7 @@ from ... import event_data
 class CampusAPI(UserPassesTestMixin, APIView):
     serializer_class = serializers.CampusVisitorSerializer
 
+    @transaction.atomic
     def post(self, request, mode):
         serializer = serializers.CampusVisitorSerializer(data=request.data)
 

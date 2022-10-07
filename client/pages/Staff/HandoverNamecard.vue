@@ -32,7 +32,7 @@ export default {
 	},
 	data() {
 		return {
-			msg: "メール配信されている事前配信QRコードを読んでください",
+			msg: "メール配信されている事前配信二次元コードを読んでください",
 			step: 0,
 			management_uuid: null,
 			namecard: null,
@@ -42,7 +42,7 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.msg = "メール配信されている事前配信QRコードを読んでください"
+			this.msg = "メール配信されている事前配信二次元コードを読んでください"
 			this.step = 0
 			this.management_uuid = null
 			this.namecard = null
@@ -53,7 +53,7 @@ export default {
 			if (this.step === 0) {
 				this.$axios.get(`/api/v1/staff/reception/confirmvisitor/${qr}/`).then((res) => {
 					this.management_uuid = qr
-					this.msg = "該当するデザインのネームカードを1枚取りQRコードを読み込んでください"
+					this.msg = "該当するデザインのネームカードを1枚取り二次元コードを読み込んでください"
 					this.namecard = res.data.design.img
 					this.step = 1
 				})

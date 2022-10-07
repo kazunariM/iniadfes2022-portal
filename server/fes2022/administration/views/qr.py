@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_list_or_404
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.utils import timezone
+from django.db import transaction
 
 from ..serializers import qr as serializers
 from ..models import PagesPermission, ReadyRoomQRdevice
@@ -44,12 +45,13 @@ class ReadyRoomQRAPI(UserPassesTestMixin, RetrieveUpdateAPIView):
 class RoomQRAPI(UserPassesTestMixin, APIView):
     serializer_class = serializers.RoomQRSerializer
 
-    def post(self, request, format=None):
+    @transaction.atomic
+    def post(self, request, placeid, format=None):
         serializer = serializers.RoomQRSerializer(data=request.data)
 
         if serializer.is_valid():
             visitor = models.Visitor.objects.filter(userid=serializer.data['visitor']).last()
-            place_data = models.PlaceID.objects.filter(placeid=serializer.data['placeid']).last()
+            place_data = models.PlaceID.objects.filter(placeid=placeid).last()
 
             if visitor and place_data:
                 room = place_data.room

@@ -8,7 +8,7 @@
 		<section v-if="!is_before">
 			<section v-if="!is_qrid">
 				<h2>ネームカードと連動させる</h2>
-				<nuxt-link to="ScanNamecard">ネームカードのQRコードを読み取る</nuxt-link>
+				<nuxt-link to="ScanNamecard">ネームカードの二次元コードを読み取る</nuxt-link>
 			</section>
 			<section v-if="is_qrid">
 				<p>スタンプラリー</p>

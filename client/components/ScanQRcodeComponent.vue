@@ -4,7 +4,10 @@
 		<p v-if="Loading">カメラを読み込んでいます</p>
 		<canvas ref="canvas"></canvas>
 		<p>{{ QR_DATA }}</p>
-		<button @click="SwitchCamera">カメラを切り替える</button>
+		<p>
+			<button @click="ReloadCamera">カメラを再読み込みする</button>
+			<button @click="SwitchCamera">カメラを切り替える</button>
+		</p>
 	</section>
 </template>
 
@@ -81,8 +84,8 @@ export default {
 					this.QR_DATA = this.code.data
 					if (this.code.data) {
 						this.$emit("func", this.code.data)
+						setTimeout(this.clear, this.timeout)
 					}
-					setTimeout(this.clear, this.timeout)
 				} else {
 					requestAnimationFrame(this.tick)
 				}
@@ -115,6 +118,16 @@ export default {
 			this.Out = !this.Out
 			this.StartCamera()
 		},
+		ReloadCamera() {
+			this.StopCamera()
+			this.StartCamera()
+		},
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+button {
+	border: solid 1px black;
+}
+</style>

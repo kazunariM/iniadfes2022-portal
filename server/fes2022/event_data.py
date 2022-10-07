@@ -5,7 +5,7 @@ import datetime
 PREREGISTRATION = datetime.date(2022, 10, 26)
 
 
-# QRコード読み取りインターバル
+# 二次元コード読み取りインターバル
 CAMPUSQR_INTERVAL = 3 * 60
 ROOMQR_INTERVAL = 10
 
