@@ -59,13 +59,14 @@ export default {
 			if (qrid) {
 				this.$axios({
 					method: "post",
-					url: `/api/v1/staff/roomqr/${this.placeid}`,
+					url: `/api/v1/staff/roomqr/`,
 					headers: {
 						"Content-Type": "application/json",
 						"X-CSRFToken": this.$cookies.get("csrftoken"),
 					},
 					data: {
 						visitor: qrid[1],
+						placeid: this.placeid,
 					},
 				})
 					.then((res) => {

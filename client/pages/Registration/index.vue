@@ -1,8 +1,8 @@
 <template>
-	<div>
+	<main>
 		<h1>来場者登録</h1>
 		<RegistrationForm />
-	</div>
+	</main>
 </template>
 
 <script>

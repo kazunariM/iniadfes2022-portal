@@ -3,7 +3,6 @@
 		<p v-if="NoPermission">カメラの利用を許可してください</p>
 		<p v-if="Loading">カメラを読み込んでいます</p>
 		<canvas ref="canvas"></canvas>
-		<p>{{ QR_DATA }}</p>
 		<p>
 			<button @click="ReloadCamera">カメラを再読み込みする</button>
 			<button @click="SwitchCamera">カメラを切り替える</button>
@@ -86,6 +85,7 @@ export default {
 						this.$emit("func", this.code.data)
 						setTimeout(this.clear, this.timeout)
 					}
+					requestAnimationFrame(this.tick)
 				} else {
 					requestAnimationFrame(this.tick)
 				}

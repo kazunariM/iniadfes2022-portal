@@ -22,7 +22,7 @@ urlpatterns = [
     # 教室のQRリーダー関連
     path('v1/staff/existplaceid/<int:placeid>/', views_qr.ExistPlaceid.as_view(), name="staff_existplaceid"),
     path('v1/staff/readyroomqr_answer/<int:placeid>/', views_qr.ReadyRoomQRAPI.as_view(), name="staff_readyroomqr_answer"),
-    path('v1/staff/roomqr/<int:placeid>/', views_qr.RoomQRAPI.as_view(), name="staff_roomqr"),
+    path('v1/staff/roomqr/', views_qr.RoomQRAPI.as_view(), name="staff_roomqr"),
 
     # 受付のネームカード発行関連
     path('v1/staff/reception/confirmvisitor/<uuid:management_uuid>/', views_reception.ConfirmVisitorAPI.as_view(), name="staff_confirmvisitor"),

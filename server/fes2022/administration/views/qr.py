@@ -46,12 +46,12 @@ class RoomQRAPI(UserPassesTestMixin, APIView):
     serializer_class = serializers.RoomQRSerializer
 
     @transaction.atomic
-    def post(self, request, placeid, format=None):
+    def post(self, request, format=None):
         serializer = serializers.RoomQRSerializer(data=request.data)
 
         if serializer.is_valid():
             visitor = models.Visitor.objects.filter(userid=serializer.data['visitor']).last()
-            place_data = models.PlaceID.objects.filter(placeid=placeid).last()
+            place_data = models.PlaceID.objects.filter(placeid=serializer.data['placeid']).last()
 
             if visitor and place_data:
                 room = place_data.room
