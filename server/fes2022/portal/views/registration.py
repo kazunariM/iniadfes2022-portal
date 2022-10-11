@@ -27,7 +27,7 @@ class RegistrationView(CreateAPIView):
 
     def perform_create(self, serializer):
         context = {
-            'protocol': self.request.scheme,
+            # 'protocol': self.request.scheme,
             'domain' : get_current_site(self.request).domain,
             'visitor' : serializer.save(),
         }

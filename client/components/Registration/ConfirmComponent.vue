@@ -5,14 +5,6 @@
 			<table>
 				<tbody>
 					<tr>
-						<td>お名前</td>
-						<td>{{ formdata.last_name }} {{ formdata.first_name }}</td>
-					</tr>
-					<tr>
-						<td>フリガナ</td>
-						<td>{{ formdata.ruby_last_name }} {{ formdata.ruby_first_name }}</td>
-					</tr>
-					<tr>
 						<td>メールアドレス</td>
 						<td>{{ formdata.email }}</td>
 					</tr>
@@ -45,7 +37,7 @@
 						<td>{{ get_from_arr("major_subject") }}</td>
 					</tr>
 					<tr>
-						<td>INIAD-FES・WELLB-FES・このポータルサイトはどこで知りましたか？</td>
+						<td>INIAD-FES・WELLB-FESはどこで知りましたか？</td>
 						<td>{{ get_know_about() }}</td>
 					</tr>
 				</tbody>
@@ -64,10 +56,6 @@ export default {
 	data() {
 		return {
 			formdata: {
-				last_name: "",
-				first_name: "",
-				ruby_last_name: "",
-				ruby_first_name: "",
 				email: "",
 				nickname: "",
 				design: "",
@@ -80,10 +68,6 @@ export default {
 				agree: false,
 			},
 			error: {
-				last_name: "",
-				first_name: "",
-				ruby_last_name: "",
-				ruby_first_name: "",
 				email: "",
 				nickname: "",
 				design: "",
@@ -116,10 +100,6 @@ export default {
 		if (!getFormdata.agree) {
 			this.$router.replace("/Registration/")
 		}
-		this.formdata.last_name = getFormdata.last_name
-		this.formdata.first_name = getFormdata.first_name
-		this.formdata.ruby_last_name = getFormdata.ruby_last_name
-		this.formdata.ruby_first_name = getFormdata.ruby_first_name
 		this.formdata.email = getFormdata.email
 		this.formdata.nickname = getFormdata.nickname
 		this.formdata.design = getFormdata.design
@@ -175,10 +155,6 @@ export default {
 				})
 				.catch((error) => {
 					const errData = error.response.data.detail
-					this.error.last_name = "last_name" in errData ? errData.last_name[0] : ""
-					this.error.first_name = "first_name" in errData ? errData.first_name[0] : ""
-					this.error.ruby_last_name = "ruby_last_name" in errData ? errData.ruby_last_name[0] : ""
-					this.error.ruby_first_name = "ruby_first_name" in errData ? errData.ruby_first_name[0] : ""
 					this.error.email = "email" in errData ? errData.email[0] : ""
 					this.error.nickname = "nickname" in errData ? errData.nickname[0] : ""
 					this.error.design = "design" in errData ? errData.design[0] : ""

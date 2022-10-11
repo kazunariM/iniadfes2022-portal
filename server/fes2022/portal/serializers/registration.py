@@ -10,7 +10,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Visitor
         fields = [
-            'nickname', 'first_name', 'last_name', 'ruby_first_name', 'ruby_last_name', 'email', 
+            'nickname', 'email', 
             'address', 'age', 'gender', 'major_subject', 'job', 'know_about', 'design',
         ]
         
@@ -24,10 +24,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('正しいメールアドレスを入力してください')
         return value
 
-    def validate_age(self, value):
-        if not 0 <= value <= 8:
-            raise serializers.ValidationError('正しく選択してください')
-        return value
+    # def validate_age(self, value):
+    #     if not 0 <= value <= 8:
+    #         raise serializers.ValidationError('正しく選択してください')
+    #     return value
 
     def create(self, validated_data):
         return models.Visitor.objects.create(

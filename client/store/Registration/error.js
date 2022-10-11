@@ -1,8 +1,4 @@
 export const state = () => ({
-	last_name: "",
-	first_name: "",
-	ruby_last_name: "",
-	ruby_first_name: "",
 	email: "",
 	nickname: "",
 	design: "",
@@ -16,10 +12,6 @@ export const state = () => ({
 
 export const mutations = {
 	add(state, payload) {
-		state.last_name = payload.last_name
-		state.first_name = payload.first_name
-		state.ruby_last_name = payload.ruby_last_name
-		state.ruby_first_name = payload.ruby_first_name
 		state.email = payload.email
 		state.nickname = payload.nickname
 		state.design = payload.design
@@ -31,10 +23,6 @@ export const mutations = {
 		state.know_about = payload.know_about
 	},
 	remove(state) {
-		state.last_name = ""
-		state.first_name = ""
-		state.ruby_last_name = ""
-		state.ruby_first_name = ""
 		state.email = ""
 		state.nickname = ""
 		state.design = ""
@@ -50,10 +38,6 @@ export const mutations = {
 export const getters = {
 	get(state) {
 		return {
-			last_name: state.last_name,
-			first_name: state.first_name,
-			ruby_last_name: state.ruby_last_name,
-			ruby_first_name: state.ruby_first_name,
 			email: state.email,
 			nickname: state.nickname,
 			design: state.design,

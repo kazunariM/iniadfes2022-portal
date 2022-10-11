@@ -22,7 +22,7 @@ def CreateVisitorSignal(sender, instance, created, **kwargs):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": f"> *氏名*\n> {instance.last_name} {instance.first_name}さん\n> *ニックネーム*\n> {instance.nickname}\n>*メールアドレス*\n> {instance.email}\n>*No.*\n> {instance.pk}"
+                        "text": f"> *ニックネーム*\n> {instance.nickname}\n>*メールアドレス*\n> {instance.email}\n>*No.*\n> {instance.pk}"
                     }
                 }
             ]
