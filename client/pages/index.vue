@@ -2,8 +2,14 @@
 	<main>
 		<h1>INIAD-FES Portalサイト</h1>
 		<section v-if="is_before">
-			<h2>事前予約はこちらから</h2>
-			<nuxt-link to="Registration">事前登録をする</nuxt-link>
+			<div class="border-b-2 m-3 p-2 pb-5">
+				<h1 class="text-md mb-1">【 INFORMATION 】</h1>
+				<p class="text-sm leading-relaxed">こちらは赤羽台祭の来場者情報事前登録ページです。<br />赤羽台祭についての情報に関しましては、ページ下部のリンクよりホームページをご覧ください。</p>
+			</div>
+			<div class="m-3 p-5 text-center">
+				<h2 class="text-xl mb-5">来場者情報事前登録はこちらから</h2>
+				<button class="bg-pink-900 hover:bg-pink-700 text-white p-5 w-full shadow-xl rounded-lg text-xl" @click="moveRegistration">事前登録をする</button>
+			</div>
 		</section>
 		<section v-if="!is_before">
 			<section v-if="!is_qrid">
@@ -42,6 +48,11 @@ export default {
 				is_before: true,
 			}
 		}
+	},
+	methods: {
+		moveRegistration() {
+			this.$router.replace("/Registration/")
+		},
 	},
 }
 </script>
