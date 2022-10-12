@@ -1,7 +1,7 @@
 <template>
 	<article>
 		<section>
-			<div class="bg-gray-200 rounded-md w-full p-1 px-2">
+			<div class="bg-gray-200 rounded-md w-full p-1 px-2 mt-2">
 				<p class="text-sm text-gray-600">トップページ</p>
 			</div>
 		</section>
