@@ -1,8 +1,8 @@
 <template>
-	<div>
+	<div class="flex flex-col h-screen">
 		<Header />
-		<nuxt />
-		<Footer />
+		<nuxt class="flex-grow m-3 md:mx-auto md:w-2/3 xl:w-1/2" />
+		<Footer class="bottom-0" />
 	</div>
 </template>
 
