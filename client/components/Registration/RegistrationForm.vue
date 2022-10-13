@@ -147,7 +147,7 @@
 				</section>
 			</fieldset>
 			<div class="center">
-				<button type="submit">入力内容を確認する</button>
+				<button type="submit" class="bg-pink-900 hover:bg-pink-700 rounded-full text-white p-1 px-3">入力内容を確認する</button>
 			</div>
 		</form>
 	</article>
@@ -263,7 +263,6 @@ export default {
 
 <style lang="scss" scoped>
 form {
-	width: 95%;
 	margin: 1em auto;
 	padding: 3%;
 	background-color: #ccc;
@@ -448,7 +447,6 @@ form {
 	}
 
 	@include mq(md) {
-		width: 80%;
 		padding: 1em;
 	}
 }

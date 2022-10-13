@@ -2,49 +2,54 @@
 	<article>
 		<h3>入力内容をご確認ください</h3>
 		<form @submit.prevent="submit">
-			<table>
-				<tbody>
-					<tr>
-						<td>メールアドレス</td>
-						<td>{{ formdata.email }}</td>
-					</tr>
-					<tr>
-						<td>ニックネーム</td>
-						<td>{{ formdata.nickname }}</td>
-					</tr>
-					<tr>
-						<td>ネームカード</td>
-						<td><img :src="get_namecard()" /></td>
-					</tr>
-					<tr>
-						<td>お住まい</td>
-						<td>{{ get_from_arr("address") }}</td>
-					</tr>
-					<tr>
-						<td>性別</td>
-						<td>{{ get_from_arr("gender") }}</td>
-					</tr>
-					<tr>
-						<td>ご年代</td>
-						<td>{{ get_from_arr("age") }}</td>
-					</tr>
-					<tr>
-						<td>ご職業</td>
-						<td>{{ get_from_arr("job") }}</td>
-					</tr>
-					<tr>
-						<td>専攻/希望分野</td>
-						<td>{{ get_from_arr("major_subject") }}</td>
-					</tr>
-					<tr>
-						<td>INIAD-FES・WELLB-FESはどこで知りましたか？</td>
-						<td>{{ get_know_about() }}</td>
-					</tr>
-				</tbody>
-			</table>
-			<div>
-				<p @click="back()">修正する</p>
-				<button type="submit">この内容で登録する</button>
+			<section>
+				<h4>ニックネーム</h4>
+				<p>{{ formdata.nickname }}</p>
+			</section>
+
+			<section>
+				<h4>ネームカードデザイン</h4>
+				<p><img :src="get_namecard()" /></p>
+			</section>
+
+			<section>
+				<h4>メールアドレス</h4>
+				<p>{{ formdata.email }}</p>
+			</section>
+
+			<section v-if="formdata.address">
+				<h4>お住まい</h4>
+				<p>{{ get_from_arr("address") }}</p>
+			</section>
+
+			<section v-if="formdata.gender">
+				<h4>性別</h4>
+				<p>{{ get_from_arr("gender") }}</p>
+			</section>
+
+			<section v-if="formdata.age">
+				<h4>ご年代</h4>
+				<p>{{ get_from_arr("age") }}</p>
+			</section>
+
+			<section v-if="formdata.job">
+				<h4>ご職業</h4>
+				<p>{{ get_from_arr("job") }}</p>
+			</section>
+
+			<section v-if="formdata.major_subject">
+				<h4>専攻/希望分野</h4>
+				<p>{{ get_from_arr("major_subject") }}</p>
+			</section>
+
+			<section v-if="formdata.know_about.length">
+				<h4>INIAD-FES・WELLB-FESはどこで知りましたか？</h4>
+				<p>{{ get_know_about() }}</p>
+			</section>
+
+			<div class="btns">
+				<span class="bg-blue-900 hover:bg-blue-700 rounded-full text-white p-1 px-3" @click="back()"><img src="https://icongr.am/entypo/back.svg?size=24&color=ffffff" />修正する</span>
+				<button type="submit" class="bg-pink-900 hover:bg-pink-700 rounded-full text-white p-1 px-3">この内容で登録する</button>
 			</div>
 		</form>
 	</article>
@@ -173,9 +178,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-table {
-	img {
-		width: 300px;
+form {
+	background-color: #ccc;
+	padding: 3%;
+	border-radius: 7px;
+
+	section {
+		background-color: #eee;
+		margin-bottom: 3%;
+		padding: 1em;
+		border-radius: 7px;
+
+		p {
+			img {
+				width: 300px;
+			}
+		}
+	}
+
+	div.btns {
+		display: flex;
+		gap: 16px;
+
+		justify-content: center;
+		align-items: center;
+
+		img {
+			display: inline;
+			margin-right: 0.5em;
+		}
 	}
 }
 </style>
