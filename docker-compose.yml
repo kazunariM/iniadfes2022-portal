@@ -10,7 +10,7 @@ services:
       - ./server:${APP_ROOT}
       - static:${STATIC_ROOT}
       - media:${MEDIA_ROOT}
-    # restart: always
+    restart: always
 
   frontend:
     build: ./client
@@ -20,15 +20,7 @@ services:
       - ./client:${APP_ROOT}
       - ${APP_ROOT}/node_modules
       - client:${APP_ROOT}/dist
-    # restart: always
-
-  postgres:
-    image: postgres:14
-    env_file:
-      - ".env"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    # restart: always
+    restart: always
 
   nginx:
     image: nginx
@@ -43,7 +35,7 @@ services:
       - frontend
     ports:
       - 80:80
-    # restart: always
+    restart: always
 
 volumes:
   static:
@@ -51,6 +43,4 @@ volumes:
   media:
     driver: local
   client:
-    driver: local
-  pgdata:
     driver: local
