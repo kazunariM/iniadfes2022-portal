@@ -24,7 +24,7 @@
 				<ul class="namecard-design">
 					<li v-for="(i, index) in list.namecard" :key="index" class="namecardbox">
 						<label :class="formdata.design == i.uuid ? 'selected' : 'no'">
-							<p><input v-model="formdata.design" :value="i.uuid" type="radio" required />{{ i.name }}</p>
+							<p><input v-model="formdata.design" :value="i.uuid" type="radio" required @focus="removeError('design')" />{{ i.name }}</p>
 							<div class="namecard-sample">
 								<img :src="i.img" :alt="i.name" />
 							</div>
@@ -32,6 +32,7 @@
 						</label>
 					</li>
 				</ul>
+				<p v-if="error.design" class="error"><img src="https://icongr.am/feather/alert-triangle.svg?size=18&color=ffffff" alt="" />{{ error.design }}</p>
 				<ul class="notice">
 					<li>当日ご着用いただくネームカードのデザインです。お好きなものをお選びください。</li>
 				</ul>
@@ -197,7 +198,7 @@ export default {
 			confirm: false,
 		}
 	},
-	created() {
+	mounted() {
 		const getListdata = this.$store.getters["Registration/data/get"]
 		this.list.age = getListdata.age
 		this.list.job = getListdata.job

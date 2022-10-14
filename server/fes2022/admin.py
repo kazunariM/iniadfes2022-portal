@@ -4,6 +4,20 @@ from . import models
 # Register your models here.
 
 
+class NamecardDesignAdmin(admin.ModelAdmin):
+    readonly_fields = ('uuid', 'numofremaining', )
+    list_display = ('serial', 'name', 'numofprints', 'numofremaining')
+    list_display_links = ('serial', 'name',)
+    ordering = ('serial', )
+
+
+class NamecardPool(admin.ModelAdmin):
+    readonly_fields = ('qrid', 'namecard', 'used')
+    list_display = ('pk', 'namecard', 'used')
+    list_display_links = ('pk', 'namecard',)
+    ordering = ('-pk', )
+
+
 class VisitorAdmin(admin.ModelAdmin):
     fieldsets = (
         ("必須", {"fields": ("nickname", "design", )}),
@@ -26,9 +40,9 @@ class RoomAdmin(admin.ModelAdmin):
     list_display_links = ("groupname",)
     search_fields = ("groupname",)
 
-admin.site.register(models.NamecardDesign)
-admin.site.register(models.NamecardPool)
 
+admin.site.register(models.NamecardDesign, NamecardDesignAdmin)
+admin.site.register(models.NamecardPool, NamecardPool)
 admin.site.register(models.Visitor, VisitorAdmin)
 admin.site.register(models.Room, RoomAdmin)
 

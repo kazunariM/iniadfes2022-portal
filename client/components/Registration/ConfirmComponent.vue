@@ -164,7 +164,7 @@ export default {
 					this.$router.replace("/Registration/Requested/")
 				})
 				.catch((error) => {
-					const errData = error.response.data.detail
+					const errData = error.response.data
 					this.error.email = "email" in errData ? errData.email[0] : ""
 					this.error.nickname = "nickname" in errData ? errData.nickname[0] : ""
 					this.error.design = "design" in errData ? errData.design[0] : ""
@@ -174,7 +174,7 @@ export default {
 					this.error.job = "job" in errData ? errData.job[0] : ""
 					this.error.major_subject = "major_subject" in errData ? errData.major_subject[0] : ""
 					this.error.know_about = "know_about" in errData ? errData.know_about[0] : ""
-					this.$store.dispatch("Registration/error/changeAction", this.error)
+					this.$store.dispatch("Registration/error/addAction", this.error)
 					this.$router.replace("/Registration/")
 				})
 		},

@@ -15,19 +15,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
         ]
         
     def validate_nickname(self, value):
-        if len(value) > 16:
+        if len(value) > 17:
             raise serializers.ValidationError('ニックネームは16字以内で入力してください')
         return value
 
     def validate_email(self, value):
-        if len(value) < 6:
+        if len(value) < 4:
             raise serializers.ValidationError('正しいメールアドレスを入力してください')
         return value
 
-    # def validate_age(self, value):
-    #     if not 0 <= value <= 8:
-    #         raise serializers.ValidationError('正しく選択してください')
-    #     return value
+    def validate_design(self, value):
+        if value.numofremaining <= 0 or datetime.date.today() > event_data.PREREGISTRATION:
+            raise serializers.ValidationError('カードの選択に誤りがあります')
+        return value
 
     def create(self, validated_data):
         return models.Visitor.objects.create(

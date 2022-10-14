@@ -25,7 +25,7 @@ class NamecardDesign(models.Model):
     name = models.CharField(max_length=50, verbose_name="ネームカードデザインの名前")
     campus = models.IntegerField(default=0, choices=CAMPUS_CHOICES, verbose_name="INIAD or WELLB")
     numofprints = models.IntegerField(default=500, verbose_name="印刷数")
-    numofremaining = models.IntegerField(default=-1, verbose_name="残り")
+    numofremaining = models.IntegerField(default=0, verbose_name="残り")
     is_subject_secret = models.BooleanField(default=False, verbose_name="シークレットか")
     is_only_advance = models.BooleanField(default=False, verbose_name="事前登録限定か")
     text = models.TextField(verbose_name="デザインの説明")

@@ -43,9 +43,9 @@ class NamecardView(ListAPIView):
 
     def get_queryset(self):
         return \
-            models.NamecardDesign.objects.all() \
+            models.NamecardDesign.objects.filter(numofremaining__gt=0) \
             if datetime.date.today() < event_data.PREREGISTRATION \
-            else models.NamecardDesign.objects.filter(is_only_advance=False)
+            else models.NamecardDesign.objects.filter(is_only_advance=False, numofremaining__gt=0)
 
 
 class CompleteView(RetrieveAPIView):
