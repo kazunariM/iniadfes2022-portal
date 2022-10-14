@@ -39,7 +39,7 @@ export const state = () => ({
 		{ value: 2, display: "東京都（23区）" },
 		{ value: 3, display: "東京都（市部）" },
 		{ value: 4, display: "埼玉県（川口）" },
-		{ value: 5, display: "埼玉県（）" },
+		{ value: 5, display: "埼玉県" },
 		{ value: 6, display: "神奈川県" },
 		{ value: 7, display: "茨城県" },
 		{ value: 8, display: "栃木県" },
