@@ -23,10 +23,10 @@ env.read_env(os.path.join(BASE_DIR, ".env"))
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET_KEY', str)
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if env('DJANGO_DEBUG', str) == 'TRUE' else False
+DEBUG = True if os.environ.get('DJANGO_DEBUG') == 'TRUE' else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,12 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'rest_framework.authtoken',
-    'allauth',
-    'allauth.account',
-    'rest_auth',
-    'rest_auth.registration',
     'corsheaders',
+    'social_django',
+    'storages',
 
     'fes2022.apps.Fes2022Config',
     'fes2022.administration.apps.AdministrationConfig',
@@ -63,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -78,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
             ],
         },
     },
@@ -92,12 +91,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DATABASE_NAME', str),
-        'USER': env('DATABASE_USER', str),
-        'PASSWORD': env('DATABASE_PASSWORD', str),
-        'HOST': env('DATABASE_HOST', str),
-        'PORT': env('DATABASE_PORT', int),
-    } if env('IS_POSTGRESQL', int) else {
+        'NAME': os.environ.get('DATABASE_NAME'), 
+        'USER': os.environ.get('DATABASE_USER'), 
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'), 
+        'HOST': os.environ.get('DATABASE_HOST'), 
+        'PORT': int(os.environ.get('DATABASE_PORT')), 
+    } if int(os.environ.get('IS_POSTGRESQL')) else { 
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': (BASE_DIR / 'db.sqlite3'),
     }
@@ -141,8 +140,16 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.environ.get('STATIC_ROOT') if os.environ.get('STATIC_ROOT') else (BASE_DIR / 'staticfiles')
 
-MEDIA_URL = 'files/'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' if os.environ.get('AWS_ACCESS_KEY_ID') else 'django.core.files.storage.FileSystemStorage'
+S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+
+MEDIA_URL = S3_URL if os.environ.get('AWS_ACCESS_KEY_ID') else 'files/'
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT') if os.environ.get('MEDIA_ROOT') else (BASE_DIR / 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -161,32 +168,42 @@ if not DEBUG:
 
 
 # Email
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if env('IS_SEND_EMAIL', int) else 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if int(os.environ.get('IS_SEND_EMAIL')) else 'django.core.mail.backends.console.EmailBackend'
 
-EMAIL_HOST = env('EMAIL_HOST', str) if env('IS_SEND_EMAIL', int) else ''
-EMAIL_PORT = env('EMAIL_PORT', int) if env('IS_SEND_EMAIL', int) else 587
-EMAIL_HOST_USER = env('EMAIL_HOST_USER', str) if env('IS_SEND_EMAIL', int) else ''
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', str) if env('IS_SEND_EMAIL', int) else ''
+EMAIL_HOST = os.environ.get('EMAIL_HOST') if int(os.environ.get('IS_SEND_EMAIL')) else ''  
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') if int(os.environ.get('IS_SEND_EMAIL')) else '' 
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') if int(os.environ.get('IS_SEND_EMAIL')) else '' 
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-SERVER_EMAIL = env('SERVER_EMAIL', str) if env('IS_SEND_EMAIL', int) else ''
-ADMINS = [('developer', env('ADMIN_EMAIL', str))] if env('IS_SEND_EMAIL', int) else []
+SERVER_EMAIL = os.environ.get('SERVER_EMAIL') if int(os.environ.get('IS_SEND_EMAIL')) else '' 
+ADMINS = [('developer', os.environ.get('ADMIN_EMAIL'))] if int(os.environ.get('IS_SEND_EMAIL')) else [] 
 
 
 # Auth
-SITE_ID = 1
 LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/staff'
+LOGOUT_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('GOOGLE_OAUTH2_SECRET')
 
 
 # CORS Domain
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
+    'https://portal.iniadfes.com',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
+    'https://portal.iniadfes.com',
 ]
 

@@ -1,0 +1,11 @@
+[
+	{
+		"model": "portal.Term",
+		"fields": {
+			"non_public": true,
+			"pre": false,
+			"fes": false,
+			"finished": false
+		}
+	}
+]

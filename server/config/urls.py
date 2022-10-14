@@ -20,6 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('fes2022.portal.urls')),
     path('api/', include('fes2022.administration.urls')),
+    path('login_staff/', include('social_django.urls', namespace='social')),
 ]
 
 
