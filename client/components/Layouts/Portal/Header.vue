@@ -6,8 +6,8 @@
 					<nuxt-link to="/"><img class="h-12" src="/fes-logo.png" alt="iniadfes-logo" /></nuxt-link>
 				</div>
 				<div class="peer-flex-none flex items-center text-sm truncate ml-4">
-					<p v-if="isqr">{{ visitor }} さん</p>
-					<button v-if="!isqr" class="bg-pink-900 hover:bg-pink-700 rounded-full text-white p-1 px-3">ネームカードと連動させる</button>
+					<p v-if="isqr && fes">{{ visitor }} さん</p>
+					<button v-if="!isqr && fes" class="bg-pink-900 hover:bg-pink-700 rounded-full text-white p-1 px-3">ネームカードと連動させる</button>
 				</div>
 			</div>
 		</div>
@@ -29,6 +29,7 @@ export default {
 		return {
 			isqr: null,
 			visitor: null,
+			fes: false,
 		}
 	},
 	mounted() {
