@@ -1,15 +1,15 @@
 <template>
-	<main>
-		<article>
-			<h1>NOT FOUND</h1>
-			<p>ごめんね、このページは存在しないの…</p>
-			<nuxt-link to="/">トップページに戻る</nuxt-link>
-		</article>
-	</main>
+	<div>
+		<p>このページは存在しません</p>
+		<nuxt-link to="/">トップページに戻る</nuxt-link>
+	</div>
 </template>
 
 <script>
 export default {
 	layout: "portal",
+	mounted() {
+		this.$nuxt.$emit("setTitle", "NOT FOUND")
+	},
 }
 </script>

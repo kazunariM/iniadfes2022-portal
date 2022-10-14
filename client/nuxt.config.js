@@ -76,4 +76,15 @@ export default {
 			})
 		},
 	},
+
+	watchOptions: { poll: true },
+
+	hooks: {
+		"vue-renderer:ssr:context": (renderContext) => {
+			const cheerio = require("cheerio")
+			const doc = cheerio.load(renderContext.nuxt)
+			doc(`body script`).remove()
+			renderContext.nuxt = doc.html()
+		},
+	},
 }

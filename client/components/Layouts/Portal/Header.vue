@@ -11,11 +11,20 @@
 				</div>
 			</div>
 		</div>
+		<div class="bg-gray-200 rounded-md p-1 px-2 grow mx-3 mt-5 md:mx-auto md:w-2/3 xl:w-1/2">
+			<h1 class="text-sm">{{ title }}</h1>
+		</div>
 	</header>
 </template>
 
 <script>
 export default {
+	props: {
+		title: {
+			type: String,
+			default: null,
+		},
+	},
 	data() {
 		return {
 			isqr: null,
@@ -28,3 +37,5 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss"></style>

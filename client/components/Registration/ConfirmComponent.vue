@@ -3,53 +3,58 @@
 		<h3>入力内容をご確認ください</h3>
 		<form @submit.prevent="submit">
 			<section>
-				<h4>ニックネーム</h4>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />ニックネーム</h4>
 				<p>{{ formdata.nickname }}</p>
 			</section>
 
 			<section>
-				<h4>ネームカードデザイン</h4>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />ネームカードデザイン</h4>
 				<p><img :src="get_namecard()" /></p>
 			</section>
 
 			<section>
-				<h4>メールアドレス</h4>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />メールアドレス</h4>
 				<p>{{ formdata.email }}</p>
 			</section>
 
 			<section v-if="formdata.address">
-				<h4>お住まい</h4>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />お住まい</h4>
 				<p>{{ get_from_arr("address") }}</p>
 			</section>
 
 			<section v-if="formdata.gender">
-				<h4>性別</h4>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />性別</h4>
 				<p>{{ get_from_arr("gender") }}</p>
 			</section>
 
 			<section v-if="formdata.age">
-				<h4>ご年代</h4>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />ご年代</h4>
 				<p>{{ get_from_arr("age") }}</p>
 			</section>
 
 			<section v-if="formdata.job">
-				<h4>ご職業</h4>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />ご職業</h4>
 				<p>{{ get_from_arr("job") }}</p>
 			</section>
 
 			<section v-if="formdata.major_subject">
-				<h4>専攻/希望分野</h4>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />専攻/希望分野</h4>
 				<p>{{ get_from_arr("major_subject") }}</p>
 			</section>
 
 			<section v-if="formdata.know_about.length">
-				<h4>INIAD-FES・WELLB-FESはどこで知りましたか？</h4>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />INIAD-FES・WELLB-FESはどこで知りましたか？</h4>
 				<p>{{ get_know_about() }}</p>
 			</section>
 
+			<section>
+				<h4><img src="https://icongr.am/feather/bell.svg?size=16&color=53122b" />メール受信設定確認のお願い<img src="https://icongr.am/feather/bell.svg?size=16&color=53122b" /></h4>
+				<span>ドメイン設定を利用されている方は「@iniadfes.com」からのメールを受信できる設定をお願いいたします。</span>
+			</section>
+
 			<div class="btns">
-				<span class="bg-blue-900 hover:bg-blue-700 rounded-full text-white p-1 px-3" @click="back()"><img src="https://icongr.am/entypo/back.svg?size=24&color=ffffff" />修正する</span>
-				<button type="submit" class="bg-pink-900 hover:bg-pink-700 rounded-full text-white p-1 px-3">この内容で登録する</button>
+				<span class="bg-blue-900 hover:bg-blue-700 text-white py-1 px-4 shadow-xl rounded-md text-center" @click="back()"><img src="https://icongr.am/entypo/back.svg?size=16&color=ffffff" />修正する</span>
+				<button type="submit" class="bg-pink-900 hover:bg-pink-700 text-white py-1 px-4 shadow-xl rounded-md">この内容で登録する</button>
 			</div>
 		</form>
 	</article>
@@ -189,7 +194,22 @@ form {
 		padding: 1em;
 		border-radius: 7px;
 
+		h4 {
+			margin-bottom: 0.5em;
+
+			img {
+				vertical-align: baseline;
+				display: inline;
+				margin-right: 0.5em;
+				margin-left: 0.5em;
+			}
+		}
+
 		p {
+			background-color: white;
+			padding: 0.5em;
+			border-radius: 7px;
+
 			img {
 				width: 300px;
 			}
@@ -197,15 +217,26 @@ form {
 	}
 
 	div.btns {
-		display: flex;
-		gap: 16px;
-
 		justify-content: center;
 		align-items: center;
+
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
 
 		img {
 			display: inline;
 			margin-right: 0.5em;
+		}
+
+		span,
+		button {
+			width: 100%;
+		}
+
+		@include mq(md) {
+			display: flex;
+			flex-direction: row;
 		}
 	}
 }
