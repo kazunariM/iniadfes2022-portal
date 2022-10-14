@@ -1,21 +1,34 @@
-{{ visitor.last_name }} {{ visitor.first_name }} 様
+{{ visitor.nickname }} 様
 
 INIAD-FES・WELLB-FES実行委員会です。
-この度は来場者事前登録していただきありがとうございます。
+この度はINIAD-FESおよびWELLB-FESのご来場者事前登録にご登録いただきありがとうございます。
+
+
 
 以下の内容に問題がなければこちらのURLを開きメールアドレスの確認をお願い致します。
-{{ protocol }}://{{ domain }}/Registration/Completed/?id={{ visitor.management_uuid }}
-
+https://{{ domain }}/Registration/Completed/?id={{ visitor.management_uuid }}
 
 ==========
 
-お名前 : {{ visitor.last_name }} {{ visitor.first_name }}
-フリガナ : {{ visitor.ruby_last_name }} {{ visitor.ruby_first_name }}
 ニックネーム : {{ visitor.nickname }}
 メールアドレス : {{ visitor.email }}
 
 ==========
 
 間違いがございましたら support@iniadfes.com までご連絡ください。
+また、こちらのメールにお心当たりのない方は、間違いの可能性がございますのでよろしければ上記のメールアドレスまでご連絡ください。
+
+
+
+==========
+
+〒115-8650
+東京都北区赤羽台1丁目7-11 INIAD HUB-1
+
+第6回INIAD-FES実行委員会 対外部渉外課
+
+E-mail: support@iniadfes.com
+
+==========
 
 ※本メールは送信専用メールアドレスから配信されています。

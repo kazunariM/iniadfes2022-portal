@@ -27,6 +27,7 @@ class SelectNamecardAPI(UserPassesTestMixin, APIView):
         if visitor and namecardpool:
             visitor.userid = namecardpool.qrid
             visitor.identifying = namecardpool.pk
+            visitor.id_data = namecardpool
             visitor.save()
 
             namecardpool.used = True

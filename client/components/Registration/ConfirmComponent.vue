@@ -2,57 +2,59 @@
 	<article>
 		<h3>入力内容をご確認ください</h3>
 		<form @submit.prevent="submit">
-			<table>
-				<tbody>
-					<tr>
-						<td>お名前</td>
-						<td>{{ formdata.last_name }} {{ formdata.first_name }}</td>
-					</tr>
-					<tr>
-						<td>フリガナ</td>
-						<td>{{ formdata.ruby_last_name }} {{ formdata.ruby_first_name }}</td>
-					</tr>
-					<tr>
-						<td>メールアドレス</td>
-						<td>{{ formdata.email }}</td>
-					</tr>
-					<tr>
-						<td>ニックネーム</td>
-						<td>{{ formdata.nickname }}</td>
-					</tr>
-					<tr>
-						<td>ネームカード</td>
-						<td><img :src="get_namecard()" /></td>
-					</tr>
-					<tr>
-						<td>お住まい</td>
-						<td>{{ get_from_arr("address") }}</td>
-					</tr>
-					<tr>
-						<td>性別</td>
-						<td>{{ get_from_arr("gender") }}</td>
-					</tr>
-					<tr>
-						<td>ご年代</td>
-						<td>{{ get_from_arr("age") }}</td>
-					</tr>
-					<tr>
-						<td>ご職業</td>
-						<td>{{ get_from_arr("job") }}</td>
-					</tr>
-					<tr>
-						<td>専攻/希望分野</td>
-						<td>{{ get_from_arr("major_subject") }}</td>
-					</tr>
-					<tr>
-						<td>INIAD-FES・WELLB-FES・このポータルサイトはどこで知りましたか？</td>
-						<td>{{ get_know_about() }}</td>
-					</tr>
-				</tbody>
-			</table>
-			<div>
-				<p @click="back()">修正する</p>
-				<button type="submit">この内容で登録する</button>
+			<section>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />ニックネーム</h4>
+				<p>{{ formdata.nickname }}</p>
+			</section>
+
+			<section>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />ネームカードデザイン</h4>
+				<p><img :src="get_namecard()" /></p>
+			</section>
+
+			<section>
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />メールアドレス</h4>
+				<p>{{ formdata.email }}</p>
+			</section>
+
+			<section v-if="formdata.address">
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />お住まい</h4>
+				<p>{{ get_from_arr("address") }}</p>
+			</section>
+
+			<section v-if="formdata.gender">
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />性別</h4>
+				<p>{{ get_from_arr("gender") }}</p>
+			</section>
+
+			<section v-if="formdata.age">
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />ご年代</h4>
+				<p>{{ get_from_arr("age") }}</p>
+			</section>
+
+			<section v-if="formdata.job">
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />ご職業</h4>
+				<p>{{ get_from_arr("job") }}</p>
+			</section>
+
+			<section v-if="formdata.major_subject">
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />専攻/希望分野</h4>
+				<p>{{ get_from_arr("major_subject") }}</p>
+			</section>
+
+			<section v-if="formdata.know_about.length">
+				<h4><img src="https://icongr.am/fontawesome/pencil.svg?size=16&color=currentColor" />INIAD-FES・WELLB-FESはどこで知りましたか？</h4>
+				<p>{{ get_know_about() }}</p>
+			</section>
+
+			<section>
+				<h4><img src="https://icongr.am/feather/bell.svg?size=16&color=53122b" />メール受信設定確認のお願い<img src="https://icongr.am/feather/bell.svg?size=16&color=53122b" /></h4>
+				<span>ドメイン設定を利用されている方は「@iniadfes.com」からのメールを受信できる設定をお願いいたします。</span>
+			</section>
+
+			<div class="btns">
+				<span class="bg-blue-900 hover:bg-blue-700 text-white py-1 px-4 shadow-xl rounded-md text-center" @click="back()"><img src="https://icongr.am/entypo/back.svg?size=16&color=ffffff" />修正する</span>
+				<button type="submit" class="bg-pink-900 hover:bg-pink-700 text-white py-1 px-4 shadow-xl rounded-md">この内容で登録する</button>
 			</div>
 		</form>
 	</article>
@@ -64,10 +66,6 @@ export default {
 	data() {
 		return {
 			formdata: {
-				last_name: "",
-				first_name: "",
-				ruby_last_name: "",
-				ruby_first_name: "",
 				email: "",
 				nickname: "",
 				design: "",
@@ -80,10 +78,6 @@ export default {
 				agree: false,
 			},
 			error: {
-				last_name: "",
-				first_name: "",
-				ruby_last_name: "",
-				ruby_first_name: "",
 				email: "",
 				nickname: "",
 				design: "",
@@ -116,10 +110,6 @@ export default {
 		if (!getFormdata.agree) {
 			this.$router.replace("/Registration/")
 		}
-		this.formdata.last_name = getFormdata.last_name
-		this.formdata.first_name = getFormdata.first_name
-		this.formdata.ruby_last_name = getFormdata.ruby_last_name
-		this.formdata.ruby_first_name = getFormdata.ruby_first_name
 		this.formdata.email = getFormdata.email
 		this.formdata.nickname = getFormdata.nickname
 		this.formdata.design = getFormdata.design
@@ -174,11 +164,7 @@ export default {
 					this.$router.replace("/Registration/Requested/")
 				})
 				.catch((error) => {
-					const errData = error.response.data.detail
-					this.error.last_name = "last_name" in errData ? errData.last_name[0] : ""
-					this.error.first_name = "first_name" in errData ? errData.first_name[0] : ""
-					this.error.ruby_last_name = "ruby_last_name" in errData ? errData.ruby_last_name[0] : ""
-					this.error.ruby_first_name = "ruby_first_name" in errData ? errData.ruby_first_name[0] : ""
+					const errData = error.response.data
 					this.error.email = "email" in errData ? errData.email[0] : ""
 					this.error.nickname = "nickname" in errData ? errData.nickname[0] : ""
 					this.error.design = "design" in errData ? errData.design[0] : ""
@@ -188,7 +174,7 @@ export default {
 					this.error.job = "job" in errData ? errData.job[0] : ""
 					this.error.major_subject = "major_subject" in errData ? errData.major_subject[0] : ""
 					this.error.know_about = "know_about" in errData ? errData.know_about[0] : ""
-					this.$store.dispatch("Registration/error/changeAction", this.error)
+					this.$store.dispatch("Registration/error/addAction", this.error)
 					this.$router.replace("/Registration/")
 				})
 		},
@@ -197,9 +183,61 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-table {
-	img {
-		width: 300px;
+form {
+	background-color: #ccc;
+	padding: 3%;
+	border-radius: 7px;
+
+	section {
+		background-color: #eee;
+		margin-bottom: 3%;
+		padding: 1em;
+		border-radius: 7px;
+
+		h4 {
+			margin-bottom: 0.5em;
+
+			img {
+				vertical-align: baseline;
+				display: inline;
+				margin-right: 0.5em;
+				margin-left: 0.5em;
+			}
+		}
+
+		p {
+			background-color: white;
+			padding: 0.5em;
+			border-radius: 7px;
+
+			img {
+				width: 300px;
+			}
+		}
+	}
+
+	div.btns {
+		justify-content: center;
+		align-items: center;
+
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+
+		img {
+			display: inline;
+			margin-right: 0.5em;
+		}
+
+		span,
+		button {
+			width: 100%;
+		}
+
+		@include mq(md) {
+			display: flex;
+			flex-direction: row;
+		}
 	}
 }
 </style>

@@ -1,8 +1,5 @@
 <template>
-	<main>
-		<h1>来場者登録</h1>
-		<RegistrationForm />
-	</main>
+	<RegistrationForm />
 </template>
 
 <script>
@@ -14,6 +11,9 @@ export default {
 		return $axios.get("/api/v1/namecards").then((res) => {
 			store.dispatch("Registration/data/addAction", res.data)
 		})
+	},
+	mounted() {
+		this.$nuxt.$emit("setTitle", "来場者登録")
 	},
 }
 </script>

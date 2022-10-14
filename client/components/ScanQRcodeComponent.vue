@@ -58,7 +58,12 @@ export default {
 		},
 		clear() {
 			this.QR_DATA = ""
-			requestAnimationFrame(this.tick)
+			this.getCameraTick()
+		},
+		getCameraTick() {
+			setTimeout(() => {
+				requestAnimationFrame(this.tick)
+			}, 200)
 		},
 		tick() {
 			this.NoPermission = false
@@ -84,18 +89,19 @@ export default {
 					if (this.code.data) {
 						this.$emit("func", this.code.data)
 						setTimeout(this.clear, this.timeout)
+					} else {
+						this.getCameraTick(this.tick)
 					}
-					requestAnimationFrame(this.tick)
 				} else {
-					requestAnimationFrame(this.tick)
+					this.getCameraTick(this.tick)
 				}
 			} else {
-				requestAnimationFrame(this.tick)
+				this.getCameraTick(this.tick)
 			}
 		},
 		StartCamera() {
 			navigator.mediaDevices
-				.getUserMedia({ video: { facingMode: this.Out ? { exact: "environment" } : "user", frameRate: { ideal: 5, max: 15 } } })
+				.getUserMedia({ video: { facingMode: this.Out ? { exact: "environment" } : "user" } })
 				.then((stream) => {
 					this.stream = stream
 					this.video.srcObject = this.stream

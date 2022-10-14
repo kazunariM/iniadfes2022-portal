@@ -4,12 +4,33 @@ from . import models
 # Register your models here.
 
 
+class NamecardDesignAdmin(admin.ModelAdmin):
+    readonly_fields = ('uuid', 'numofremaining', )
+    list_display = ('serial', 'name', 'numofprints', 'numofremaining')
+    list_display_links = ('serial', 'name',)
+    ordering = ('serial', )
+
+
+class NamecardPool(admin.ModelAdmin):
+    readonly_fields = ('qrid', 'namecard', 'used')
+    list_display = ('pk', 'namecard', 'used')
+    list_display_links = ('pk', 'namecard',)
+    ordering = ('-pk', )
+
+
 class VisitorAdmin(admin.ModelAdmin):
-    readonly_fields = ("pk", "management_uuid", "userid", "created_at",)
-    list_display = ("pk", "last_name", "first_name", "is_handedover", "is_preregistration", "is_verified_email","created_at")
+    fieldsets = (
+        ("必須", {"fields": ("nickname", "design", )}),
+        ("いずれかが必要", {"fields": ("email", "phone", "remark", )}),
+        ("アンケート", {"fields": ("address", "age", "gender", "major_subject", "job", "know_about", )}),
+        ("ステータス", {"fields": ("is_verified_email", "is_preregistration", "is_printed", "is_handedover",)}),
+        ("情報", {"fields": ("pk", "identifying", "userid", "management_uuid", "created_at", "id_data", )}),
+    )
+    readonly_fields = ("pk", "identifying", "userid", "management_uuid", "created_at", "id_data", )
+    list_display = ("pk", "nickname", "is_handedover", "is_preregistration", "is_verified_email","created_at")
     list_filter = ("is_handedover", "is_preregistration",)
-    list_display_links = ("pk", "last_name", )
-    search_fields = ("nickname", "last_name", "first_name")
+    list_display_links = ("pk", "nickname", )
+    search_fields = ("nickname",)
 
 
 class RoomAdmin(admin.ModelAdmin):
@@ -19,9 +40,9 @@ class RoomAdmin(admin.ModelAdmin):
     list_display_links = ("groupname",)
     search_fields = ("groupname",)
 
-admin.site.register(models.NamecardDesign)
-admin.site.register(models.NamecardPool)
 
+admin.site.register(models.NamecardDesign, NamecardDesignAdmin)
+admin.site.register(models.NamecardPool, NamecardPool)
 admin.site.register(models.Visitor, VisitorAdmin)
 admin.site.register(models.Room, RoomAdmin)
 

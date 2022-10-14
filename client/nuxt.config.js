@@ -10,7 +10,20 @@ export default {
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	head: {
 		title: "INIAD-FES2022",
-		meta: [{ charset: "utf-8" }, { name: "viewport", content: "width=device-width, initial-scale=1" }, { hid: "description", name: "description", content: "" }, { name: "format-detection", content: "telephone=no" }],
+		meta: [
+			{ charset: "utf-8" },
+			{ name: "viewport", content: "width=device-width, initial-scale=1" },
+			{ name: "format-detection", content: "telephone=no" },
+			{ hid: "description", name: "description", content: "赤羽台キャンパス大学祭「赤羽台祭」、2022/10/29(土), 30(日)に開催！" },
+			{ hid: "og:url", name: "og:url", content: "https://portal.iniadfes.com/" },
+			{ hid: "og:type", name: "og:type", content: "website" },
+			{ hid: "og:title", name: "og:title", content: "赤羽台祭 カスタムINIADネームカード ポータルサイト" },
+			{ hid: "og:description", name: "og:description", content: "赤羽台キャンパス大学祭「赤羽台祭」、2022/10/29(土), 30(日)に開催！" },
+			{ hid: "og:site_name", name: "og:site_name", content: "赤羽台祭" },
+			{ hid: "og:image", name: "og:image", content: "/.png" },
+			{ hid: "keywords", name: "keywords", content: "東洋大学,赤羽,大学祭,INIAD-FES,WELLB-FES,INIAD,WELLB,2022" },
+			{ hid: "twitter:card", name: "twitter:card", content: "summary_large_image" },
+		],
 		link: [{ rel: "icon", type: "image/png", href: "/favicon.png" }],
 	},
 
@@ -74,6 +87,17 @@ export default {
 				path: "*",
 				component: resolve("~/pages/404.vue"),
 			})
+		},
+	},
+
+	watchOptions: { poll: true },
+
+	hooks: {
+		"vue-renderer:ssr:context": (renderContext) => {
+			const cheerio = require("cheerio")
+			const doc = cheerio.load(renderContext.nuxt)
+			doc(`body script`).remove()
+			renderContext.nuxt = doc.html()
 		},
 	},
 }

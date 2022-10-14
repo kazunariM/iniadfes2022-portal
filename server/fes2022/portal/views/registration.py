@@ -27,7 +27,7 @@ class RegistrationView(CreateAPIView):
 
     def perform_create(self, serializer):
         context = {
-            'protocol': self.request.scheme,
+            # 'protocol': self.request.scheme,
             'domain' : get_current_site(self.request).domain,
             'visitor' : serializer.save(),
         }
@@ -43,9 +43,9 @@ class NamecardView(ListAPIView):
 
     def get_queryset(self):
         return \
-            models.NamecardDesign.objects.all() \
+            models.NamecardDesign.objects.filter(numofremaining__gt=0) \
             if datetime.date.today() < event_data.PREREGISTRATION \
-            else models.NamecardDesign.objects.filter(is_only_advance=False)
+            else models.NamecardDesign.objects.filter(is_only_advance=False, numofremaining__gt=0)
 
 
 class CompleteView(RetrieveAPIView):
