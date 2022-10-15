@@ -66,54 +66,60 @@
 				<p>来年度以降のINIAD-FESのクオリティ向上のため、よろしければアンケートにご協力ください。</p>
 				<section>
 					<h4>お住まい(都道府県)</h4>
-					<select v-model="formdata.address">
+					<select v-model="formdata.address" @focus="removeError('address')">
 						<option v-for="(i, index) in list.address" :key="index" :value="i.value">
 							{{ i.display }}
 						</option>
 					</select>
+					<p v-if="error.address" class="error"><img src="https://icongr.am/feather/alert-triangle.svg?size=18&color=ffffff" alt="" />{{ error.address }}</p>
 				</section>
 
 				<section>
 					<h4>性別</h4>
-					<select v-model="formdata.gender">
+					<select v-model="formdata.gender" @focus="removeError('gender')">
 						<option v-for="(i, index) in list.gender" :key="index" :value="i.value">
 							{{ i.display }}
 						</option>
 					</select>
+					<p v-if="error.gender" class="error"><img src="https://icongr.am/feather/alert-triangle.svg?size=18&color=ffffff" alt="" />{{ error.gender }}</p>
 				</section>
 
 				<section>
 					<h4>ご年代</h4>
-					<select v-model="formdata.age">
+					<select v-model="formdata.age" @focus="removeError('age')">
 						<option v-for="(i, index) in list.age" :key="index" :value="i.value">
 							{{ i.display }}
 						</option>
 					</select>
+					<p v-if="error.age" class="error"><img src="https://icongr.am/feather/alert-triangle.svg?size=18&color=ffffff" alt="" />{{ error.age }}</p>
 				</section>
 
 				<section>
 					<h4>ご職業</h4>
-					<select v-model="formdata.job">
+					<select v-model="formdata.job" @focus="removeError('job')">
 						<option v-for="(i, index) in list.job" :key="index" :value="i.value">
 							{{ i.display }}
 						</option>
 					</select>
+					<p v-if="error.job" class="error"><img src="https://icongr.am/feather/alert-triangle.svg?size=18&color=ffffff" alt="" />{{ error.job }}</p>
 				</section>
 
 				<section v-if="formdata.job == 4 || formdata.job == 5">
 					<h4>専攻/希望分野</h4>
-					<select v-model="formdata.major_subject">
+					<select v-model="formdata.major_subject" @focus="removeError('major_subject')">
 						<option v-for="(i, index) in list.major_subject" :key="index" :value="i.value">
 							{{ i.display }}
 						</option>
 					</select>
+					<p v-if="error.major_subject" class="error"><img src="https://icongr.am/feather/alert-triangle.svg?size=18&color=ffffff" alt="" />{{ error.major_subject }}</p>
 				</section>
 
 				<section>
 					<h4>INIAD-FES・WELLB-FESはどこで知りましたか？</h4>
-					<p v-for="(i, index) in list.know_about" :key="index">
-						<label><input v-model="formdata.know_about" :value="i" type="checkbox" />{{ i }}</label>
+					<p v-for="(i, index) in list.know_about" :key="index" @focus="removeError('know_about')">
+						<label><input v-model="formdata.know_about" :value="i" type="checkbox" @focus="removeError('know_about')" />{{ i }}</label>
 					</p>
+					<p v-if="error.know_about" class="error"><img src="https://icongr.am/feather/alert-triangle.svg?size=18&color=ffffff" alt="" />{{ error.know_about }}</p>
 				</section>
 			</section>
 		</fieldset>

@@ -157,7 +157,18 @@ export default {
 					"Content-Type": "application/json",
 					"X-CSRFToken": this.$cookies.get("csrftoken"),
 				},
-				data: this.formdata,
+				data: {
+					email: this.formdata.email,
+					nickname: this.formdata.nickname,
+					design: this.formdata.design,
+					address: this.formdata.address,
+					gender: this.formdata.gender,
+					age: this.formdata.age,
+					job: this.formdata.job,
+					major_subject: this.formdata.major_subject,
+					know_about: this.formdata.know_about.join(","),
+					agree: this.formdata.agree,
+				},
 			})
 				.then((res) => {
 					this.$store.dispatch("Registration/requested/changeAction", { requested: true })

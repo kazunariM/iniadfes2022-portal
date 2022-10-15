@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.postgres.fields import ArrayField
 import uuid, os
 
 from . import event_data
@@ -56,7 +55,7 @@ class Visitor(models.Model):
     gender = models.IntegerField(null=True, blank=True, choices=event_data.GENDER_CHOICES, verbose_name="性別")
     major_subject = models.IntegerField(choices=event_data.MAJOR_SUBJECT_CHOICES, blank=True, null=True, verbose_name="専攻/希望分野")
     job = models.IntegerField(null=True, blank=True, choices=event_data.JOB_CHOICES, verbose_name="職業")
-    know_about = ArrayField(models.CharField(max_length=20), blank=True)
+    know_about = models.TextField(null=True, blank=True, verbose_name="どこで知ったか")
     design = models.ForeignKey(NamecardDesign, related_name="visitors_select", on_delete=models.PROTECT, verbose_name="ネームカードのデザイン")
     remark = models.TextField(verbose_name="備考欄", blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now, verbose_name="初回登録日時")
