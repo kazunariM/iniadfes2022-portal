@@ -18,6 +18,10 @@
 				<p>来場者1名1名それぞれにネームカードを発行いたします。そのため複数人でご来場される場合は<span style="font-weight: bolder; font-size: 1.2em">ご来場される人数分の登録をお願いいたします</span>。メールアドレスは同じもので構いません。ぜひ皆様でそれぞれ楽しいニックネームをお付けください。</p>
 			</div>
 		</div>
+
+		<div class="center my-5">
+			<button class="bg-pink-900 hover:bg-pink-700 text-white py-2 px-8 shadow-xl rounded-md w-full" @click="back">トップに戻る</button>
+		</div>
 	</div>
 </template>
 
@@ -44,13 +48,16 @@ export default {
 			qr: null,
 		}
 	},
-	created() {
+	mounted() {
+		this.$nuxt.$emit("setTitle", "来場者登録 完了")
 		QRCode.toDataURL(this.id, { width: 400 }).then((code) => {
 			this.qr = code
 		})
 	},
-	mounted() {
-		this.$nuxt.$emit("setTitle", "来場者登録 完了")
+	methods: {
+		back() {
+			this.$router.push("/")
+		},
 	},
 }
 </script>
