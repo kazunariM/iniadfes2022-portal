@@ -24,7 +24,7 @@
 				<ul class="namecard-design">
 					<li v-for="(i, index) in list.namecard" :key="index" class="namecardbox">
 						<label :class="formdata.design == i.uuid ? 'selected' : 'no'">
-							<p><input v-model="formdata.design" :value="i.uuid" type="radio" required @focus="removeError('design')" />{{ i.name }}</p>
+							<p><input v-model="formdata.design" :value="i.uuid" type="radio" name="namecard" required @focus="removeError('design')" />{{ i.name }}</p>
 							<div class="namecard-sample">
 								<img :src="i.img" :alt="i.name" />
 							</div>
@@ -439,7 +439,15 @@ form {
 					}
 
 					@include mq(md) {
-						max-width: 78vw;
+						max-width: 55vw;
+					}
+
+					@include mq(lg) {
+						max-width: 55vw;
+					}
+
+					@include mq(xl) {
+						max-width: 45vw;
 					}
 				}
 			}
