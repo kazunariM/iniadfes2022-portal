@@ -81,6 +81,7 @@ class Room(models.Model):
     count = models.IntegerField(default=0, verbose_name="今の人数")
     unique_count = models.IntegerField(default=0, verbose_name="総人数")
     total_count = models.IntegerField(default=0, verbose_name="総延べ人数")
+    collaboration = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f'{self.groupname}({"WELLB" if self.campus else "INIAD"})'

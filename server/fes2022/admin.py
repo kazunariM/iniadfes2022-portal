@@ -41,6 +41,12 @@ class RoomAdmin(admin.ModelAdmin):
     search_fields = ("groupname",)
 
 
+class NowRoomAdmin(admin.ModelAdmin):
+    list_display = ("pk", "visitor", "inorout", "room", "scanned_at")
+    list_filter = ("room",)
+    readonly_fields = ("pk", "scanned_at")
+
+
 admin.site.register(models.NamecardDesign, NamecardDesignAdmin)
 admin.site.register(models.NamecardPool, NamecardPool)
 admin.site.register(models.Visitor, VisitorAdmin)
@@ -48,7 +54,9 @@ admin.site.register(models.Room, RoomAdmin)
 
 admin.site.register(models.PlaceID)
 admin.site.register(models.NowCampus)
-admin.site.register(models.NowRoom)
+
+admin.site.register(models.NowRoom, NowRoomAdmin)
+
 admin.site.register(models.Area)
 admin.site.register(models.StampCourse)
 admin.site.register(models.Story)

@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save, pre_save
 
-from .models import NamecardDesign, NamecardPool, Visitor
+from .models import NamecardDesign, NamecardPool, NowRoom, Visitor
 
 import urllib, json, os
 
@@ -65,3 +65,16 @@ def CreateVisitorSignal(sender, instance, created, **kwargs):
         instance.design.save()
         
 post_save.connect(CreateVisitorSignal, Visitor)
+
+
+def NowRoomSignal(sender, instance, created, **kwargs):
+    if created:
+        room = instance.room
+        room_history = NowRoom.objects.filter(room=room)
+        room.count = sum(room_history.values_list('count', flat=True))
+        room.unique_count = sum(room_history.values_list('unique_count', flat=True))
+        room.total_count = sum(room_history.values_list('total_count', flat=True))
+        room.save()
+        print(room_history.values_list('unique_count', flat=True))
+
+post_save.connect(NowRoomSignal, NowRoom)
