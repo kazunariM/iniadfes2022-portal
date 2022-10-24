@@ -69,6 +69,14 @@ class Visitor(models.Model):
         return f'{self.pk} {self.nickname}'
 
 
+class Campus(models.Model):
+    day = models.DateField(default=timezone.now, verbose_name="日付")
+    count = models.IntegerField(default=0, verbose_name="今の人数")
+    unique_count = models.IntegerField(default=0, verbose_name="総人数")
+    total_count = models.IntegerField(default=0, verbose_name="総延べ人数")
+    pop = models.ImageField(upload_to='ipad_pop/', verbose_name="QRコード読み取りiPadに表示する画像")
+    
+
 class Room(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
     groupname = models.CharField(max_length=100, verbose_name="団体名")
@@ -81,6 +89,7 @@ class Room(models.Model):
     count = models.IntegerField(default=0, verbose_name="今の人数")
     unique_count = models.IntegerField(default=0, verbose_name="総人数")
     total_count = models.IntegerField(default=0, verbose_name="総延べ人数")
+    collaboration = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f'{self.groupname}({"WELLB" if self.campus else "INIAD"})'

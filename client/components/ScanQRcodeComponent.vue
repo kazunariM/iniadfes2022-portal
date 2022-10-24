@@ -43,6 +43,7 @@ export default {
 		this.context = this.canvas.getContext("2d")
 		this.video = document.createElement("video")
 		this.StartCamera()
+		setInterval(this.reload, 120000)
 	},
 	destroyed() {
 		this.StopCamera()
@@ -128,12 +129,33 @@ export default {
 			this.StopCamera()
 			this.StartCamera()
 		},
+		reload() {
+			location.reload()
+		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
-button {
-	border: solid 1px black;
+section {
+	p {
+		text-align: center;
+		display: flex;
+		gap: 4em;
+		align-items: center;
+		justify-content: center;
+	}
+
+	canvas {
+		width: 80%;
+		margin: auto;
+	}
+
+	button {
+		background-color: #831843;
+		border-radius: 7px;
+		padding: 2px;
+		color: white;
+	}
 }
 </style>
