@@ -1,13 +1,20 @@
 <template>
 	<main>
 		<h1>入退室リーダー</h1>
-		<section>
+		<div>
+			<p class="count">現在の人数： {{ count }}</p>
+		</div>
+		<div>
 			<ScanQRcodeComponent :timeout="timeout" @func="Register"></ScanQRcodeComponent>
 			<Inya v-if="isOK">
 				<p>{{ nickname }}</p>
 				<p>{{ inorout }}</p>
 			</Inya>
-		</section>
+		</div>
+		<p v-if="error" class="error">{{ error }}</p>
+		<div>
+			<img :src="img" alt="" />
+		</div>
 	</main>
 </template>
 
@@ -51,7 +58,13 @@ export default {
 			inorout: "",
 			isOK: false,
 			timeout: 3000,
+			img: null,
+			count: null,
+			error: null,
 		}
+	},
+	mounted() {
+		this.getCount()
 	},
 	methods: {
 		Register(url) {
@@ -76,7 +89,8 @@ export default {
 						setTimeout(this.CloseInya, this.timeout)
 					})
 					.catch((error) => {
-						alert(JSON.stringify(error.response))
+						this.error = error.response.data.detail
+						setTimeout(this.deleteError, this.timeout)
 					})
 			}
 		},
@@ -84,9 +98,68 @@ export default {
 			this.nickname = ""
 			this.inorout = ""
 			this.isOK = false
+			this.getCount()
+		},
+		getCount() {
+			this.$axios.get(`/api/v1/staff/room/${this.placeid}/`).then((res) => {
+				this.img = res.data.pop
+				this.count = res.data.count
+			})
+		},
+		deleteError() {
+			this.error = null
 		},
 	},
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+div {
+	text-align: center;
+
+	p {
+		&.count {
+			display: inline-block;
+			font-size: 2em;
+		}
+
+		&.error {
+			position: absolute;
+			background-color: #831843;
+			color: white;
+			font-weight: bold;
+			border-radius: 5px;
+			padding: 0.5em;
+			left: 50%;
+			transform: translate(-50%, 5%);
+			-webkit-transform: translate(-50%, 5%);
+			font-size: 1.5em;
+
+			&::before {
+				content: "";
+				position: absolute;
+				left: 50%;
+				transform: translate(-50%, -120%);
+				-webkit-transform: translate(-50%, -120%);
+				display: block;
+				width: 0;
+				height: 0;
+				border-right: 15px solid transparent;
+				border-bottom: 15px solid #831843;
+				border-left: 15px solid transparent;
+			}
+		}
+	}
+
+	div {
+		img {
+			width: 80%;
+			margin-left: auto;
+			margin-right: auto;
+			aspect-ratio: 4/3;
+			background-color: black;
+			border: solid 1px black;
+		}
+	}
+}
+</style>

@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from django.shortcuts import get_list_or_404
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.utils import timezone
-from django.db import transaction
 
 from ..serializers import qr as serializers
 from ..models import PagesPermission, ReadyRoomQRdevice
@@ -45,7 +44,6 @@ class ReadyRoomQRAPI(UserPassesTestMixin, RetrieveUpdateAPIView):
 class RoomQRAPI(UserPassesTestMixin, APIView):
     serializer_class = serializers.RoomQRSerializer
 
-    @transaction.atomic
     def post(self, request, format=None):
         serializer = serializers.RoomQRSerializer(data=request.data)
 
@@ -58,7 +56,7 @@ class RoomQRAPI(UserPassesTestMixin, APIView):
                 return Response({"detail": "来場者または部屋のデータが見つかりません", "err": 0}, status=404)
             
             room = place.room
-            visitor_histroy = models.NowRoom.objects.filter(visitor=visitor)
+            visitor_histroy = models.NowRoom.objects.filter(visitor=visitor, scanned_at__date=timezone.localdate(timezone.now()))
             
             if visitor_histroy:
                 if (timezone.now() - visitor_histroy.last().scanned_at).seconds < event_data.ROOMQR_INTERVAL:
@@ -159,3 +157,14 @@ class RoomQRAPI(UserPassesTestMixin, APIView):
     def test_func(self):
         return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='ReadQRinRoom').users.all()
 
+
+class RoomPeopleAPI(UserPassesTestMixin, RetrieveAPIView):
+    serializer_class = serializers.RoomPeopleSerializer
+    queryset = models.Room
+    lookup_field = 'placeid'
+    
+    def get_object(self):
+        return models.PlaceID.objects.get(placeid=self.kwargs[self.lookup_field]).room
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='ReadQRinRoom').users.all()

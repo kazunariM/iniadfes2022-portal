@@ -33,9 +33,13 @@ class VisitorAdmin(admin.ModelAdmin):
     search_fields = ("nickname",)
 
 
+class CampusAdmin(admin.ModelAdmin):
+    list_display = ("day", "count", "unique_count", "total_count")
+
+
 class RoomAdmin(admin.ModelAdmin):
     readonly_fields = ("uuid",)
-    list_display = ("campus", "groupname",)
+    list_display = ("campus", "groupname", "count", "unique_count", "total_count")
     list_filter = ("only_stamp", "have_a_stamp", "campus",)
     list_display_links = ("groupname",)
     search_fields = ("groupname",)
@@ -45,11 +49,12 @@ class NowRoomAdmin(admin.ModelAdmin):
     list_display = ("pk", "visitor", "inorout", "room", "scanned_at")
     list_filter = ("room",)
     readonly_fields = ("pk", "scanned_at")
-
-
+    
+    
 admin.site.register(models.NamecardDesign, NamecardDesignAdmin)
 admin.site.register(models.NamecardPool, NamecardPool)
 admin.site.register(models.Visitor, VisitorAdmin)
+admin.site.register(models.Campus, CampusAdmin)
 admin.site.register(models.Room, RoomAdmin)
 
 admin.site.register(models.PlaceID)

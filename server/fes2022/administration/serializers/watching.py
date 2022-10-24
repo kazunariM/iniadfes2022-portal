@@ -5,7 +5,7 @@ from ... import models
 
 class CampusPeopleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.NowCampus
+        model = models.Campus
         fields = ["count", "unique_count", "total_count"]
 
 

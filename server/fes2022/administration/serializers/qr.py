@@ -32,3 +32,12 @@ class RoomQRSerializer(serializers.Serializer):
         fields = [
             'visitor', 'placeid'
         ]
+        
+        
+class RoomPeopleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Room
+        fields = [
+            'count', 'pop'
+        ]
+        

@@ -17,12 +17,14 @@ urlpatterns = [
     path('v1/staff/pages/<str:page>/', views_auth.PagePermissionAPI.as_view(), name="staff_pages"),
 
     # 入退構のQRリーダー関連
-    path('v1/staff/campusqr/<str:mode>/', views_campus.CampusAPI.as_view(), name='staff_campusqr'),
+    path('v1/staff/campusqr/enter/', views_campus.EnterCampusAPI.as_view(), name='staff_campusqr_enter'),
+    path('v1/staff/campusqr/exit/', views_campus.ExitCampusAPI.as_view(), name='staff_campusqr_exit'),
 
     # 教室のQRリーダー関連
     path('v1/staff/existplaceid/<int:placeid>/', views_qr.ExistPlaceid.as_view(), name="staff_existplaceid"),
     path('v1/staff/readyroomqr_answer/<int:placeid>/', views_qr.ReadyRoomQRAPI.as_view(), name="staff_readyroomqr_answer"),
     path('v1/staff/roomqr/', views_qr.RoomQRAPI.as_view(), name="staff_roomqr"),
+    path('v1/staff/room/<int:placeid>/', views_qr.RoomPeopleAPI.as_view(), name="staff_room"),
 
     # 受付のネームカード発行関連
     path('v1/staff/reception/confirmvisitor/<uuid:management_uuid>/', views_reception.ConfirmVisitorAPI.as_view(), name="staff_confirmvisitor"),

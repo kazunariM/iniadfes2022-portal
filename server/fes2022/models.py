@@ -69,6 +69,14 @@ class Visitor(models.Model):
         return f'{self.pk} {self.nickname}'
 
 
+class Campus(models.Model):
+    day = models.DateField(default=timezone.now, verbose_name="日付")
+    count = models.IntegerField(default=0, verbose_name="今の人数")
+    unique_count = models.IntegerField(default=0, verbose_name="総人数")
+    total_count = models.IntegerField(default=0, verbose_name="総延べ人数")
+    pop = models.ImageField(upload_to='ipad_pop/', verbose_name="QRコード読み取りiPadに表示する画像")
+    
+
 class Room(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, db_index=True, primary_key=True)
     groupname = models.CharField(max_length=100, verbose_name="団体名")
