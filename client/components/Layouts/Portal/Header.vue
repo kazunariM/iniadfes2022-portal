@@ -5,9 +5,9 @@
 				<div class="flex-none">
 					<nuxt-link to="/"><img class="h-12" src="/fes-logo.png" alt="iniadfes-logo" /></nuxt-link>
 				</div>
-				<div class="peer-flex-none flex items-center text-sm truncate ml-4">
-					<p v-if="isqr && fes">{{ visitor }} さん</p>
-					<button v-if="!isqr && fes" class="bg-pink-900 hover:bg-pink-700 rounded-full text-white p-1 px-3">ネームカードと連動させる</button>
+				<div v-if="now == 'fes'" class="peer-flex-none flex items-center text-sm truncate ml-4">
+					<p v-if="nickname">{{ nickname }} さん</p>
+					<button v-if="!nickname" class="bg-pink-900 hover:bg-pink-700 rounded-full text-white p-1 px-3">ネームカードと連動させる</button>
 				</div>
 			</div>
 		</div>
@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex"
+
 export default {
 	props: {
 		title: {
@@ -25,16 +27,11 @@ export default {
 			default: null,
 		},
 	},
-	data() {
-		return {
-			isqr: null,
-			visitor: null,
-			fes: false,
-		}
-	},
-	mounted() {
-		this.isqr = !!this.$cookies.get("qrid")
-		this.visitor = this.$cookies.get("visitor")
+	computed: {
+		...mapState({
+			now: (state) => state.switching.now,
+			nickname: (state) => state.visitor.nickname,
+		}),
 	},
 }
 </script>

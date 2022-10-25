@@ -14,7 +14,7 @@ class OpenAPI(APIView):
             models.Visitor,
             userid=qrid
         )
-        return Response({'qrid': visitor.userid})
+        return Response({'qrid': visitor.userid, 'nickname': visitor.nickname})
 
 
 class PortalTopAPI(RetrieveAPIView):

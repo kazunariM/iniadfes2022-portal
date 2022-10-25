@@ -65,7 +65,7 @@ export default {
 						setTimeout(this.CloseInya, 3000)
 					})
 					.catch((error) => {
-						alert(error.response.data.detail)
+						error = error.response.data.detail
 						setTimeout(this.deleteError, 3000)
 					})
 			}

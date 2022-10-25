@@ -8,7 +8,7 @@ export default {
 		return $axios
 			.get(`/api/v1/open/${params.qrid}/`)
 			.then((res) => {
-				$cookies.set("qrid", res.data.qrid, { path: "/", maxAge: 60 * 60 })
+				$cookies.set("userid", res.data.qrid, { path: "/", maxAge: 60 * 60 })
 				redirect("/")
 			})
 			.catch(() => {
