@@ -13,5 +13,5 @@ urlpatterns = [
     path('v1/open/<uuid:qrid>/', portal_top.OpenAPI.as_view(), name="api_open"),
     path('v1/portaltop/<uuid:userid>/', portal_top.PortalTopAPI.as_view(), name="api_portal_top"),
     
-    path('v1/state/<int:pk>/', state.State.as_view(), name="api_state"),
+    path('v1/state/', state.State.as_view(), name="api_state"),
 ]

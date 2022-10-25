@@ -4,6 +4,7 @@ import datetime
 
 from ... import models
 from ... import event_data
+from ..models import Term
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -25,14 +26,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return value
 
     def validate_design(self, value):
-        if value.numofremaining <= 0 or datetime.date.today() > event_data.PREREGISTRATION:
+        if value.numofremaining <= 0:
+            raise serializers.ValidationError('カードの選択に誤りがあります')
+        if value.is_only_advance and (not Term.objects.all().order_by("pk").first().pre):
             raise serializers.ValidationError('カードの選択に誤りがあります')
         return value
 
     def create(self, validated_data):
         return models.Visitor.objects.create(
             **validated_data,
-            is_preregistration=(datetime.date.today() < event_data.PREREGISTRATION),
+            is_preregistration=(Term.objects.all().order_by("pk").first().pre),
         )
 
 

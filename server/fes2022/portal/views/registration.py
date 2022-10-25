@@ -11,6 +11,7 @@ from django.middleware.csrf import get_token
 from ..serializers import registration as serializer
 from ... import models
 from ... import event_data
+from ..models import Term
 
 import datetime, os, qrcode, io
 
@@ -44,7 +45,7 @@ class NamecardView(ListAPIView):
     def get_queryset(self):
         return \
             models.NamecardDesign.objects.filter(numofremaining__gt=0) \
-            if datetime.date.today() < event_data.PREREGISTRATION \
+            if Term.objects.all().order_by("pk").first().pre \
             else models.NamecardDesign.objects.filter(is_only_advance=False, numofremaining__gt=0)
 
 

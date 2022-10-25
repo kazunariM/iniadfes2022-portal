@@ -13,8 +13,12 @@ export default {
 	middleware: "staff",
 	asyncData({ $axios, $cookies, route, redirect }) {
 		return $axios.get("/api/v1/staff/menu").then((res) => {
-			return {
-				pages: res.data,
+			if (res.data.length) {
+				return {
+					pages: res.data,
+				}
+			} else {
+				redirect("/")
 			}
 		})
 	},

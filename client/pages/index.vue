@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<section v-if="is_before">
+		<section v-if="now == 'pre'">
 			<div class="border-b-2 m-3 p-2 pb-5">
 				<h2 class="text-md mb-1">【 INFORMATION 】</h2>
 				<p class="text-sm leading-relaxed">こちらは赤羽台祭の来場者情報事前登録ページです。<br />赤羽台祭についての情報に関しましては、ページ下部のリンクよりホームページをご覧ください。</p>
@@ -10,15 +10,16 @@
 				<button class="bg-pink-900 hover:bg-pink-700 text-white p-5 w-full shadow-xl rounded-lg text-xl" @click="moveRegistration">事前登録をする</button>
 			</div>
 		</section>
-		<section v-if="!is_before">
+		<section v-if="now == 'fes'">
 			<section v-if="!is_qrid">
 				<h2>ネームカードと連動させる</h2>
 				<nuxt-link to="ScanNamecard">ネームカードのQRコードを読み取る</nuxt-link>
 			</section>
 			<section v-if="is_qrid">
-				<p>スタンプラリー</p>
+				<h2>スタンプラリー</h2>
 			</section>
 		</section>
+
 		<section class="border-t-2 p-5 m-3">
 			<h3 class="text-xl text-center">赤羽台祭関連サイト</h3>
 			<a href="https://akabanedai-fes.com">
@@ -44,30 +45,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex"
+
 export default {
 	layout: "portal",
-	asyncData({ $axios, $cookies }) {
-		if ($cookies.get("qrid")) {
-			return $axios
-				.get(`/api/v1/portaltop/${$cookies.get("qrid")}/`)
-				.then((res) => {
-					$cookies.set("visitor", res.data.nickname)
-					return {
-						is_qrid: true,
-						visitor: res.data.nickname,
-					}
-				})
-				.catch(() => {
-					return {
-						is_qrid: false,
-					}
-				})
-		} else {
-			return {
-				is_qrid: false,
-				is_before: true,
-			}
-		}
+	middleware: "portal",
+	computed: {
+		...mapState({
+			now: (state) => state.switching.now,
+			is_qrid: (state) => !!state.visitor.userid,
+		}),
 	},
 	mounted() {
 		this.$nuxt.$emit("setTitle", "赤羽台祭ポータル")
