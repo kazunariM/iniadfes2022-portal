@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import portal_top, registration, state
+from .views import portal_top, registration, state, stamprally
 
 
 urlpatterns = [
@@ -14,4 +14,9 @@ urlpatterns = [
     path('v1/portaltop/<uuid:userid>/', portal_top.PortalTopAPI.as_view(), name="api_portal_top"),
     
     path('v1/state/', state.State.as_view(), name="api_state"),
+
+    path('v1/stamprally/', stamprally.StamprallyList.as_view(), name="api_stamprally"),
+    path('v1/stampsheet/<uuid:stampcourse>/', stamprally.StampSheetAPI.as_view(), name="api_stamp_sheet"),
+    path('v1/stamps/<uuid:stampcourse>/', stamprally.AllStampAPI.as_view(), name="api_all_stamp"),
+    path('v1/stamprally/<uuid:userid>/<uuid:stampcourse>/', stamprally.StampHistroyAPI.as_view(), name="api_got_stamp"),
 ]

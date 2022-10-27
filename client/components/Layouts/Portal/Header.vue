@@ -7,7 +7,7 @@
 				</div>
 				<div v-if="now == 'fes'" class="peer-flex-none flex items-center text-sm truncate ml-4">
 					<p v-if="nickname">{{ nickname }} さん</p>
-					<button v-if="!nickname" class="bg-pink-900 hover:bg-pink-700 rounded-full text-white p-1 px-3">ネームカードと連動させる</button>
+					<button v-if="!nickname" class="bg-pink-900 hover:bg-pink-700 rounded-full text-white p-1 px-3" @click="toscannamecard">ネームカードと連動させる</button>
 				</div>
 			</div>
 		</div>
@@ -32,6 +32,11 @@ export default {
 			now: (state) => state.switching.now,
 			nickname: (state) => state.visitor.nickname,
 		}),
+	},
+	methods: {
+		toscannamecard() {
+			window.location.href = "/ScanNamecard"
+		},
 	},
 }
 </script>

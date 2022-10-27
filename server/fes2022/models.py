@@ -92,7 +92,7 @@ class Room(models.Model):
     collaboration = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f'{self.groupname}({"WELLB" if self.campus else "INIAD"})'
+        return f'{self.groupname}'
         
 
 class PlaceID(models.Model):

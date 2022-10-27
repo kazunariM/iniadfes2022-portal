@@ -12,6 +12,9 @@ export default {
 				redirect("/")
 			})
 			.catch(() => {
+				if ($cookies.get("userid")) {
+					$cookies.remove("userid")
+				}
 				redirect("/")
 			})
 	},
