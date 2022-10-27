@@ -56,44 +56,79 @@ class RoomQRAPI(UserPassesTestMixin, APIView):
                 return Response({"detail": "来場者または部屋のデータが見つかりません", "err": 0}, status=404)
             
             room = place.room
-            visitor_histroy = models.NowRoom.objects.filter(visitor=visitor, scanned_at__date=timezone.localdate(timezone.now()))
             
-            if visitor_histroy:
-                if (timezone.now() - visitor_histroy.last().scanned_at).seconds < event_data.ROOMQR_INTERVAL:
-                    return Response({"detail": "重複して読み取られてしまっています", "err": 1}, status=400)
-
-            if not visitor_histroy:
-                inorout = True
-                count = +1
-                unique = +1
-                total = +1
-            
-            elif (visitor_histroy.last().room == room):
-                unique = 0
+            if not room.only_stamp:
                 
-                if visitor_histroy.last().inorout:
-                    inorout = False
-                    count = -1
-                    total = 0
+                visitor_histroy = models.NowRoom.objects.filter(visitor=visitor, scanned_at__date=timezone.localdate(timezone.now()))
+                
+                if visitor_histroy:
+                    if (timezone.now() - visitor_histroy.last().scanned_at).seconds < event_data.ROOMQR_INTERVAL:
+                        return Response({"detail": "重複して読み取られてしまっています", "err": 1}, status=400)
+
+                if not visitor_histroy:
+                    inorout = True
+                    count = +1
+                    unique = +1
+                    total = +1
+                
+                elif (visitor_histroy.last().room == room):
+                    unique = 0
                     
-                else:
+                    if visitor_histroy.last().inorout:
+                        inorout = False
+                        count = -1
+                        total = 0
+                        
+                    else:
+                        inorout = True
+                        count = +1
+                        total = +1
+                
+                elif (visitor_histroy.last().room != room):
                     inorout = True
                     count = +1
                     total = +1
-            
-            elif (visitor_histroy.last().room != room):
-                inorout = True
-                count = +1
-                total = +1
-                
-                if room.uuid in visitor_histroy.values_list('room', flat=True):
-                    unique = 0
-                else:
-                    unique = +1
-                
-                if visitor_histroy.last().inorout: # 他部屋入室したまま
-                    if visitor_histroy.last().room.collaboration == room:
-                        nowroom_data1 = models.NowRoom(
+                    
+                    if room.uuid in visitor_histroy.values_list('room', flat=True):
+                        unique = 0
+                    else:
+                        unique = +1
+                    
+                    if visitor_histroy.last().inorout: # 他部屋入室したまま
+                        if visitor_histroy.last().room.collaboration == room:
+                            nowroom_data1 = models.NowRoom(
+                                visitor=visitor,
+                                room=visitor_histroy.last().room,
+                                inorout=False,
+                                count=-1,
+                                unique_count=0,
+                                total_count=0,
+                            )
+                            nowroom_data1.save()
+                    
+                            nowroom_data2 = models.NowRoom(
+                                visitor=visitor,
+                                room=room,
+                                inorout=True,
+                                count=+1,
+                                unique_count=unique,
+                                total_count=+1,
+                            )
+                            nowroom_data2.save()
+                    
+                            nowroom_data3 = models.NowRoom(
+                                visitor=visitor,
+                                room=room,
+                                inorout=False,
+                                count=-1,
+                                unique_count=0,
+                                total_count=0,
+                            )
+                            nowroom_data3.save()
+                            
+                            return Response({'nickname':nowroom_data3.visitor.nickname, 'inorout':nowroom_data3.inorout}, status=201)
+                    
+                        nowroom_data0 = models.NowRoom(
                             visitor=visitor,
                             room=visitor_histroy.last().room,
                             inorout=False,
@@ -101,56 +136,46 @@ class RoomQRAPI(UserPassesTestMixin, APIView):
                             unique_count=0,
                             total_count=0,
                         )
-                        nowroom_data1.save()
+                        nowroom_data0.save()
+                    
                 
-                        nowroom_data2 = models.NowRoom(
-                            visitor=visitor,
-                            room=room,
-                            inorout=True,
-                            count=+1,
-                            unique_count=unique,
-                            total_count=+1,
-                        )
-                        nowroom_data2.save()
+                else:
+                    print(f"入退室記録で不正 {serializer.data['visitor']} {serializer.data['visitor']} {timezone.now()}")
+                    return Response({"detail": "何かがおかしいです", "err": 2}, status=400)
                 
-                        nowroom_data3 = models.NowRoom(
-                            visitor=visitor,
-                            room=room,
-                            inorout=False,
-                            count=-1,
-                            unique_count=0,
-                            total_count=0,
-                        )
-                        nowroom_data3.save()
-                        
-                        return Response({'nickname':nowroom_data3.visitor.nickname, 'inorout':nowroom_data3.inorout}, status=201)
+                nowroom = models.NowRoom(
+                    visitor=visitor,
+                    room=room,
+                    inorout=inorout,
+                    count=count,
+                    unique_count=unique,
+                    total_count=total,
+                )
+                nowroom.save()
                 
-                    nowroom_data0 = models.NowRoom(
-                        visitor=visitor,
-                        room=visitor_histroy.last().room,
-                        inorout=False,
-                        count=-1,
-                        unique_count=0,
-                        total_count=0,
-                    )
-                    nowroom_data0.save()
-                 
+                return Response({'nickname':nowroom.visitor.nickname, 'inorout':nowroom.inorout}, status=201)
             
             else:
-                print(f"入退室記録で不正 {serializer.data['visitor']} {serializer.data['visitor']} {timezone.now()}")
-                return Response({"detail": "何かがおかしいです", "err": 2}, status=400)
-            
-            nowroom = models.NowRoom(
-                visitor=visitor,
-                room=room,
-                inorout=inorout,
-                count=count,
-                unique_count=unique,
-                total_count=total,
-            )
-            nowroom.save()
-            
-            return Response({'nickname':nowroom.visitor.nickname, 'inorout':nowroom.inorout}, status=201)
+                stamp = models.Stamp.objects.get(room=room)
+                stampcourse = stamp.stampcourse
+                stamphistory = models.StampHistory.objects.filter(
+                    visitor=visitor,
+                    stampcourse=stampcourse,
+                ).first()
+                
+                if not stamphistory:
+                    stamphistory = models.StampHistory(
+                        visitor=visitor,
+                        stampcourse=stampcourse,
+                    )
+                    stamphistory.save()
+                
+                if stamp in stamphistory.got_stamp.all():
+                    return Response({}, status=202)
+                
+                stamphistory.got_stamp.add(stamp)
+                
+                return Response({"name": room.groupname}, status=200)
 
         return Response({}, status=400)
 
