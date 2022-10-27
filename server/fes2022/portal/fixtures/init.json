@@ -2,6 +2,7 @@
 	{
 		"model": "portal.Term",
 		"fields": {
+			"id": 1,
 			"non_public": true,
 			"pre": false,
 			"fes": false,

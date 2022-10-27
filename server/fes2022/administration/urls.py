@@ -5,6 +5,7 @@ from .views import campus as views_campus
 from .views import qr as views_qr
 from .views import reception as views_reception
 from .views import watching as views_watching
+from .views import prereg as views_prereg
 
 
 urlpatterns = [
@@ -34,4 +35,9 @@ urlpatterns = [
     # 人数確認
     path('v1/staff/watching/campus/', views_watching.CampusPeopleAPI.as_view(), name='staff_watching_campus'),
     path('v1/staff/watching/room/', views_watching.RoomPeopleAPI.as_view(), name='staff_watching_room'),
+
+    # 事前登録用QR割り当て
+    path('v1/staff/allocate/', views_prereg.AllocationQRIDAPI.as_view(), name='staff_allocate'),
+    path('v1/staff/get_prereg/not_printing/', views_prereg.PreRegListAPI.as_view(), name='staff_get_prereg_not_printing'),
+    path('v1/staff/printed/<uuid:userid>/', views_prereg.PrintedQRAPI.as_view(), name='staff_printed'),
 ]

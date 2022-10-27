@@ -27,7 +27,7 @@ class VisitorAdmin(admin.ModelAdmin):
         ("情報", {"fields": ("pk", "identifying", "userid", "management_uuid", "created_at", "id_data", )}),
     )
     readonly_fields = ("pk", "identifying", "userid", "management_uuid", "created_at", "id_data", )
-    list_display = ("pk", "nickname", "is_handedover", "is_preregistration", "is_verified_email","created_at")
+    list_display = ("pk", "nickname", "is_printed", "is_preregistration", "is_verified_email", "design", "identifying", "userid", "is_handedover", "created_at")
     list_filter = ("is_handedover", "is_preregistration",)
     list_display_links = ("pk", "nickname", )
     search_fields = ("nickname",)

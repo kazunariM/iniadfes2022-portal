@@ -2,6 +2,7 @@
 	{
 		"model": "administration.PagesPermission",
 		"fields": {
+			"id": 1,
 			"func": "入構用二次元コード読み取り",
 			"page": "EnterCampusQR"
 		}
@@ -9,6 +10,7 @@
 	{
 		"model": "administration.PagesPermission",
 		"fields": {
+			"id": 2,
 			"func": "退構用二次元コード読み取り",
 			"page": "ExitCampusQR"
 		}
@@ -16,6 +18,7 @@
 	{
 		"model": "administration.PagesPermission",
 		"fields": {
+			"id": 3,
 			"func": "教室用二次元コード読み取り",
 			"page": "ReadQRinRoom"
 		}
@@ -23,6 +26,7 @@
 	{
 		"model": "administration.PagesPermission",
 		"fields": {
+			"id": 4,
 			"func": "ネームカード発行",
 			"page": "HandoverNamecard"
 		}
@@ -30,8 +34,17 @@
 	{
 		"model": "administration.PagesPermission",
 		"fields": {
+			"id": 5,
 			"func": "人数確認",
 			"page": "Watching"
+		}
+	},
+	{
+		"model": "administration.PagesPermission",
+		"fields": {
+			"id": 6,
+			"func": "QRID割り当て",
+			"page": "AllocationQRID"
 		}
 	}
 ]
