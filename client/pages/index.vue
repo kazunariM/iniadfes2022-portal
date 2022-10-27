@@ -17,6 +17,9 @@
 			</section>
 			<section v-if="is_qrid">
 				<h2>スタンプラリー</h2>
+				<div class="stampbox">
+					<p v-for="(stamprally, index) in stamprallies" :key="index" class="stampbutton" @click="open_stamprally(stamprally.uuid)">{{ stamprally.title }}</p>
+				</div>
 			</section>
 		</section>
 
@@ -50,6 +53,15 @@ import { mapState } from "vuex"
 export default {
 	layout: "portal",
 	middleware: "portal",
+	asyncData({ $axios, $cookies, route, redirect }) {
+		if ($cookies.get("userid")) {
+			return $axios.get("/api/v1/stamprally").then((res) => {
+				return {
+					stamprallies: res.data,
+				}
+			})
+		}
+	},
 	computed: {
 		...mapState({
 			now: (state) => state.switching.now,
@@ -63,6 +75,23 @@ export default {
 		moveRegistration() {
 			this.$router.push("/Registration/")
 		},
+		open_stamprally(id) {
+			this.$router.push(`/Stamprally/${id}/`)
+		},
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+div.stampbox {
+	text-align: center;
+}
+
+p.stampbutton {
+	display: inline-block;
+	cursor: pointer;
+	padding: 2em;
+	border: solid 1px black;
+	border-radius: 7px;
+}
+</style>

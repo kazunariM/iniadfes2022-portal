@@ -19,7 +19,16 @@ class StampSheetSerializer(serializers.ModelSerializer):
         ]
 
 
+class RoomNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Room
+        fields = [
+            'groupname'
+        ]
+
+
 class NoImgStampSerializer(serializers.ModelSerializer):
+    room = RoomNameSerializer()
     class Meta:
         model = models.Stamp
         fields = [
