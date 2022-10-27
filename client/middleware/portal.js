@@ -3,6 +3,7 @@ export default function ({ route, redirect, $axios, store, $cookies }) {
 		for (const key of Object.keys(res.data)) {
 			if (res.data[key]) {
 				store.dispatch("switching/setAction", key)
+				break
 			}
 		}
 	})

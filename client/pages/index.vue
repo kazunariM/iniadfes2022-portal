@@ -10,6 +10,11 @@
 				<button class="bg-pink-900 hover:bg-pink-700 text-white p-5 w-full shadow-xl rounded-lg text-xl" @click="moveRegistration">事前登録をする</button>
 			</div>
 		</section>
+		<section v-if="!now">
+			<h2>事前登録期間は終了しました</h2>
+			<p>事前登録期間は終了いたしました。ご盛況いただき誠にありがとうございました。事前登録を行なっていない方の当日のご来場につきましても、最大およそ1000人の制限人数に到達しない限りはご入場いただくことが可能ですので、ぜひ一度ご来場いただければと存じます。皆様のご来場を心よりお待ちしております。</p>
+			<p>2022/10/29・2022/10/30 10:00～18:00に赤羽台祭開催！</p>
+		</section>
 		<section v-if="now == 'fes'">
 			<section v-if="!is_qrid">
 				<h2>ネームカードと連動させる</h2>
