@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
-from ..models import PlaceID
+from ..models import NamecardDesign, PlaceID
 
 # Create your models here.
 
@@ -24,3 +24,8 @@ class ReadyRoomQRdevice(models.Model):
     placeid = models.ForeignKey(PlaceID, on_delete=models.CASCADE)
     ts = models.DateTimeField(null=True, blank=True, verbose_name='準備完了時刻')
     ready = models.BooleanField(default=False, verbose_name='準備完了かどうか')
+
+
+class PreregConfig(models.Model):
+    exclusion = models.ManyToManyField(NamecardDesign, blank=True)
+    num = models.IntegerField(default=100, verbose_name='一度に表示される量')

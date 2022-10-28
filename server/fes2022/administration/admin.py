@@ -7,3 +7,4 @@ from . import models
 admin.site.register(models.PagesPermission)
 admin.site.register(models.ReadyRoomQR)
 admin.site.register(models.ReadyRoomQRdevice)
+admin.site.register(models.PreregConfig)

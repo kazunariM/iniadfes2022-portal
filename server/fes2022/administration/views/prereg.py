@@ -5,7 +5,7 @@ from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from ... import models
-from ..models import PagesPermission
+from ..models import PagesPermission, PreregConfig
 from ..serializers import prereg as serializers
 
 
@@ -42,7 +42,8 @@ class PreRegListAPI(UserPassesTestMixin, ListAPIView):
     queryset = models.Visitor
     
     def get_queryset(self):
-        return models.Visitor.objects.filter(is_preregistration=True, is_printed=False, id_data__isnull=False).order_by('design')[:100]
+        config = PreregConfig.objects.get(pk=1)
+        return models.Visitor.objects.filter(is_preregistration=True, is_printed=False, id_data__isnull=False).exclude(design__in=list(config.exclusion.all())).order_by('design')[:config.num]
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='AllocationQRID').users.all()
