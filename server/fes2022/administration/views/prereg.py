@@ -42,7 +42,7 @@ class PreRegListAPI(UserPassesTestMixin, ListAPIView):
     queryset = models.Visitor
     
     def get_queryset(self):
-        return models.Visitor.objects.filter(is_preregistration=True, is_printed=False, id_data__isnull=False).order_by('design')[:50]
+        return models.Visitor.objects.filter(is_preregistration=True, is_printed=False, id_data__isnull=False).order_by('design')[:100]
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='AllocationQRID').users.all()
