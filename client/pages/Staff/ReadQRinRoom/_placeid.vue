@@ -84,7 +84,11 @@ export default {
 				})
 					.then((res) => {
 						this.nickname = res.data.nickname
-						this.inorout = res.data.inorout ? "入室" : "退室"
+						if (res.data.inorout === null) {
+							this.inorout = "スタンプゲット！"
+						} else {
+							this.inorout = res.data.inorout ? "入室" : "退室"
+						}
 						this.isOK = true
 						setTimeout(this.CloseInya, this.timeout)
 					})

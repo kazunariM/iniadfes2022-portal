@@ -24,6 +24,7 @@ class SelectNamecardAPI(UserPassesTestMixin, APIView):
     def post(self, request):
         visitor = models.Visitor.objects.filter(management_uuid=request.data["management_uuid"]).first()
         namecardpool = models.NamecardPool.objects.filter(qrid=request.data["userid"], used=False).first()
+        namecardpool2 = models.NamecardPool.objects.filter(qrid=request.data["userid"], used=True).first()
         if visitor and namecardpool:
             visitor.userid = namecardpool.qrid
             visitor.identifying = namecardpool.pk
@@ -34,6 +35,9 @@ class SelectNamecardAPI(UserPassesTestMixin, APIView):
             namecardpool.save()
             
             return Response({"nickname" : visitor.nickname, "identifying" : visitor.identifying})
+        
+        elif namecardpool2 and visitor:
+            return Response({"nickname" : visitor.nickname, "identifying" : visitor.identifying, "img": visitor.design.img.url,  "pre": True})
         
         return Response({}, status=400)
 
