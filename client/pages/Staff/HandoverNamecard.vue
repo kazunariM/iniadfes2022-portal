@@ -9,10 +9,10 @@
 			<p v-if="nickname">{{ identifying }}</p>
 		</div>
 		<div v-if="step === 2">
-			<p>{{ nickname }}</p>
-			<p>{{ identifying }}</p>
+			<p>ニックネーム： {{ nickname }}</p>
+			<p>整理番号： {{ identifying }}</p>
 			<p><img :src="namecard" alt="" /></p>
-			<p @click="completed">お渡し完了</p>
+			<p style="button" @click="completed">お渡し完了</p>
 		</div>
 	</main>
 </template>
@@ -71,7 +71,7 @@ export default {
 						}).then((res) => {
 							this.nickname = res.data.nickname
 							this.identifying = res.data.identifying
-							// this.namecard = res.data.img
+							this.namecard = res.data.img
 							this.msg = "ニックネームを記入しお渡しし完了を押してください。"
 							this.step = 2
 						})
@@ -128,5 +128,12 @@ export default {
 <style lang="scss" scoped>
 img {
 	width: 300px;
+}
+
+p.button {
+	border-radius: 7px;
+	padding: 0.5em;
+	margin: 0.5em;
+	border: solid 1px black;
 }
 </style>

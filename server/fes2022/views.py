@@ -10,5 +10,5 @@ class QRlistView(ListView):
     context_object_name = "cards"
     
     def get_queryset(self):
-        return models.NamecardPool.objects.filter(used=False)
+        return models.NamecardPool.objects.filter(used=False).order_by("namecard").order_by("pk")
     
