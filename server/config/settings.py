@@ -209,3 +209,10 @@ CSRF_TRUSTED_ORIGINS = [
     'https://portal.iniadfes.com',
 ]
 
+# Redis
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': os.enviorn.get('REDIS_LOCATION'),
+    }
+}
