@@ -1,3 +1,4 @@
+import os
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -37,7 +38,8 @@ class SelectNamecardAPI(UserPassesTestMixin, APIView):
             return Response({"nickname" : visitor.nickname, "identifying" : visitor.identifying})
         
         elif namecardpool2 and visitor:
-            return Response({"nickname" : visitor.nickname, "identifying" : visitor.identifying, "img": visitor.design.img.url,  "pre": True})
+            os.environ.get("DJANGO_BACKEND_URL")
+            return Response({"nickname" : visitor.nickname, "identifying" : visitor.identifying, "img": os.environ.get("DJANGO_BACKEND_URL")+visitor.design.img.url, "pre": True})
         
         return Response({}, status=400)
 
