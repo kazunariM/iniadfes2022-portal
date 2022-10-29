@@ -14,7 +14,7 @@ class ConfirmVisitorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Visitor
-        fields = ["nickname", "design"]
+        fields = ["nickname", "design", "userid"]
 
 
 class SelectNamecardSerializer(serializers.Serializer):

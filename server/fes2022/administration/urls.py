@@ -31,6 +31,7 @@ urlpatterns = [
     path('v1/staff/reception/confirmvisitor/<uuid:management_uuid>/', views_reception.ConfirmVisitorAPI.as_view(), name="staff_confirmvisitor"),
     path('v1/staff/reception/selectnamecard/', views_reception.SelectNamecardAPI.as_view(), name="staff_selectnamecard"),
     path('v1/staff/reception/handover/<uuid:management_uuid>/', views_reception.HandedoverAPI.as_view(), name="staff_handover"),
+    path('v1/staff/reception/getinfo/<uuid:management_uuid>/', views_reception.getInfoNamecard.as_view(), name="staff_getinfo"),
     
     # 人数確認
     path('v1/staff/watching/campus/', views_watching.CampusPeopleAPI.as_view(), name='staff_watching_campus'),

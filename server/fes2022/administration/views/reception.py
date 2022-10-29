@@ -49,3 +49,10 @@ class HandedoverAPI(UserPassesTestMixin, UpdateAPIView):
     def test_func(self):
         return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='HandoverNamecard').users.all()
 
+
+class getInfoNamecard(UserPassesTestMixin, RetrieveAPIView):
+    serializer_class = serializers.ConfirmVisitorSerializer
+    lookup_field = 'management_uuid'
+    
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user in PagesPermission.objects.get(page='HandoverNamecard').users.all()
