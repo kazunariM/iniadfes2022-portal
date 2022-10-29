@@ -12,7 +12,6 @@ class NamecardDesignAdmin(admin.ModelAdmin):
 
 
 class NamecardPool(admin.ModelAdmin):
-    readonly_fields = ('qrid', 'namecard', 'used')
     list_display = ('pk', 'namecard', 'used')
     list_display_links = ('pk', 'namecard',)
     ordering = ('-pk', )
