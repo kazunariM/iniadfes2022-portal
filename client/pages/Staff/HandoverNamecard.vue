@@ -5,10 +5,13 @@
 		<p v-if="msg">{{ msg }}</p>
 		<div v-if="step === 1">
 			<img :src="namecard" alt="" />
+			<p v-if="nickname">{{ nickname }}</p>
+			<p v-if="nickname">{{ identifying }}</p>
 		</div>
 		<div v-if="step === 2">
 			<p>{{ nickname }}</p>
 			<p>{{ identifying }}</p>
+			<p><img :src="namecard" alt="" /></p>
 			<p @click="completed">お渡し完了</p>
 		</div>
 	</main>
@@ -53,9 +56,30 @@ export default {
 			if (this.step === 0) {
 				this.$axios.get(`/api/v1/staff/reception/confirmvisitor/${qr}/`).then((res) => {
 					this.management_uuid = qr
-					this.msg = "該当するデザインのネームカードを1枚取り二次元コードを読み込んでください"
-					this.namecard = res.data.design.img
-					this.step = 1
+					if (res.data.userid) {
+						this.$axios({
+							method: "post",
+							url: "api/v1/staff/reception/selectnamecard/",
+							headers: {
+								"Content-Type": "application/json",
+								"X-CSRFToken": this.$cookies.get("csrftoken"),
+							},
+							data: {
+								management_uuid: this.management_uuid,
+								userid: res.data.userid,
+							},
+						}).then((res) => {
+							this.nickname = res.data.nickname
+							this.identifying = res.data.identifying
+							// this.namecard = res.data.img
+							this.msg = "ニックネームを記入しお渡しし完了を押してください。"
+							this.step = 2
+						})
+					} else {
+						this.msg = "該当するデザインのネームカードを1枚取り二次元コードを読み込んでください"
+						this.namecard = res.data.design.img
+						this.step = 1
+					}
 				})
 			} else if (this.step === 1) {
 				const qrid = qr.match(/https:\/\/portal.iniadfes.com\/open\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/)

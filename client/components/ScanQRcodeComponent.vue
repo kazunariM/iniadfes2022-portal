@@ -33,7 +33,7 @@ export default {
 			imageData: null,
 			code: null,
 
-			Out: true,
+			Out: false,
 
 			QR_DATA: "",
 		}
