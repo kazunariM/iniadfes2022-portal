@@ -6,7 +6,7 @@ from ... import models
 class NamecardSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.NamecardDesign
-        fields = ["img"]
+        fields = ["img", "nickname", "identifying"]
 
 
 class ConfirmVisitorSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class ConfirmVisitorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Visitor
-        fields = ["nickname", "design"]
+        fields = ["nickname", "design", "identifying"]
 
 
 class SelectNamecardSerializer(serializers.Serializer):
@@ -26,3 +26,9 @@ class HandedoverSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Visitor
         fields = ["is_handedover"]
+        
+        
+class HakkouSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Visitor
+        fields = ["nickname", "design", "identifying"]
