@@ -149,6 +149,7 @@ section {
 	canvas {
 		width: 80%;
 		margin: auto;
+		transform: scale(-1, 1);
 	}
 
 	button {
