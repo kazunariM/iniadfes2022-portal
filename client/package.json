@@ -17,6 +17,7 @@
 		"cheerio": "^1.0.0-rc.12",
 		"cookie-universal-nuxt": "^2.2.2",
 		"core-js": "^3.19.3",
+		"jsqr": "^1.4.0",
 		"nuxt": "^2.15.8",
 		"qrcode": "^1.5.1",
 		"vue": "^2.6.14",

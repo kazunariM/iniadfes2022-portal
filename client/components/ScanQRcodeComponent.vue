@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import jsQR from "~/assets/js/jsQR.js"
+const jsQR = require("jsqr")
 
 export default {
 	name: "ScanQRcodeComponent",

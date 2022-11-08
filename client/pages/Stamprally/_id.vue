@@ -2,6 +2,7 @@
 	<div>
 		<div class="stamprally">
 			<canvas ref="canvas"></canvas>
+			<img src="" alt="" hidden />
 		</div>
 		<div class="stamps">
 			<table>
@@ -48,6 +49,7 @@ export default {
 			canvas: null,
 			context: null,
 			imgs: [],
+			img: null,
 		}
 	},
 	mounted() {
@@ -56,18 +58,24 @@ export default {
 		this.canvas.width = 1170
 		this.canvas.height = 2532
 		this.context = this.canvas.getContext("2d")
-		let img = new Image()
-		img.src = this.sheet
-		this.context.drawImage(img, 0, 0, this.canvas.width, this.canvas.height)
-		img = null
+		this.img = new Image()
+		this.img.onload = function () {
+			this.context.drawImage(this.img, 0, 0, this.canvas.width, this.canvas.height)
+		}
+		this.img.src = this.sheet
+		this.context.drawImage(this.img, 0, 0, this.canvas.width, this.canvas.height)
+
 		for (let i = 0; i < this.stamps.length; i++) {
 			for (const stamp of this.got_stamp) {
 				if (this.stamps[i].serial === stamp.serial) {
+					this.img = null
+					this.img = new Image()
 					this.stamps[i].img = stamp.img
-					let img = new Image()
-					img.src = stamp.img
-					this.context.drawImage(img, 0, 0, this.canvas.width, this.canvas.height)
-					img = null
+					this.img.onload = function () {
+						this.context.drawImage(this.img, 0, 0, this.canvas.width, this.canvas.height)
+					}
+					this.img.src = stamp.img
+					this.context.drawImage(this.img, 0, 0, this.canvas.width, this.canvas.height)
 					break
 				}
 			}
