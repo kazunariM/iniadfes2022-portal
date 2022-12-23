@@ -22,6 +22,14 @@ services:
       - client:${APP_ROOT}/dist
     restart: always
 
+  postgres:
+    image: postgres:14
+    env_file:
+      - ".env"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
   nginx:
     image: nginx
     env_file:
@@ -43,4 +51,6 @@ volumes:
   media:
     driver: local
   client:
+    driver: local
+  pgdata:
     driver: local
